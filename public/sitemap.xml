@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+    xmlns:xhtml="http://www.w3.org/1999/xhtml">
+    
+        
+        <url>
+            <loc>//localhost:1313/dummy-robotic-arm/</loc>
+            <lastmod>2024-11-10T00:00:00+00:00</lastmod>
+        </url>
+        
+    
+        
+        <url>
+            <loc>//localhost:1313/</loc>
+            <lastmod>2024-11-10T00:00:00+00:00</lastmod>
+        </url>
+        
+    
+        
+        <url>
+            <loc>//localhost:1313/6-dof-robot-kinematics/</loc>
+            <lastmod>2024-01-01T00:00:00+00:00</lastmod>
+        </url>
+        
+    
+        
+        <url>
+            <loc>//localhost:1313/dummy-control-system/</loc>
+            <lastmod>2024-01-01T00:00:00+00:00</lastmod>
+        </url>
+        
+    
+        
+        <url>
+            <loc>//localhost:1313/robosoccer-progress/</loc>
+            <lastmod>2024-01-01T00:00:00+00:00</lastmod>
+        </url>
+        
+    
+        
+        <url>
+            <loc>//localhost:1313/stepper-motor-control-system/</loc>
+            <lastmod>2024-01-01T00:00:00+00:00</lastmod>
+        </url>
+        
+    
+        
+        <url>
+            <loc>//localhost:1313/wheeled-legged-robot/</loc>
+            <lastmod>2024-01-01T00:00:00+00:00</lastmod>
+        </url>
+        
+    
+        
+        <url>
+            <loc>//localhost:1313/encoder-calibration-system/</loc>
+        </url>
+        
+    
+        
+        <url>
+            <loc>//localhost:1313/motion-control-system/</loc>
+        </url>
+        
+    
+        
+        <url>
+            <loc>//localhost:1313/motor-driver-and-foc/</loc>
+        </url>
+        
+    
+        
+        <url>
+            <loc>//localhost:1313/categories/</loc>
+        </url>
+        
+    
+        
+        <url>
+            <loc>//localhost:1313/tags/</loc>
+        </url>
+        
+    
+</urlset>

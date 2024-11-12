@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>My New Hugo Site/dummy-robotic-arm/6-dof-robot-kinematics/</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="all,follow">
+    <meta name="googlebot" content="index,follow,snippet,archive">
+    <link rel="stylesheet" href="http://localhost:1313/hugo-theme-console/css/terminal-0.7.4.min.css">
+    <link rel="stylesheet" href="http://localhost:1313/hugo-theme-console/css/animate-4.1.1.min.css">
+    <link rel="stylesheet" href="http://localhost:1313/hugo-theme-console/css/console.css">
+    
+      <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+      <![endif]-->
+       <meta property="og:title" content="" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/dummy-robotic-arm/6-dof-robot-kinematics/" />
+
+
+<meta name="twitter:title" content=""/>
+<meta name="twitter:description" content="6-DOF Robot Kinematics Implementation
+This document details the implementation of a 6-Degree-of-Freedom (6-DOF) robotic arm kinematics solver, including both forward kinematics (FK) and inverse kinematics (IK) calculations.
+1. Core Mathematical Functions
+Basic Trigonometry
+inline float cosf(float x)
+{
+    return arm_cos_f32(x);
+}
+
+inline float sinf(float x)
+{
+    return arm_sin_f32(x);
+}
+These optimized trigonometric functions use ARM&rsquo;s hardware acceleration for improved performance.
+Matrix Operations
+static void MatMultiply(const float* _matrix1, const float* _matrix2, float* _matrixOut,
+                        const int _m, const int _l, const int _n)
+{
+    float tmp;
+    int i, j, k;
+    for (i = 0; i &lt; _m; i&#43;&#43;)
+    {
+        for (j = 0; j &lt; _n; j&#43;&#43;)
+        {
+            tmp = 0.0f;
+            for (k = 0; k &lt; _l; k&#43;&#43;)
+            {
+                tmp &#43;= _matrix1[_l * i &#43; k] * _matrix2[_n * k &#43; j];
+            }
+            _matrixOut[_n * i &#43; j] = tmp;
+        }
+    }
+}
+Implements matrix multiplication for:"/>
+
+</head>
+<body class="terminal">
+    <div class="container">
+        <div class="terminal-nav">
+          <header class="terminal-logo">
+            <div class="logo terminal-prompt">
+              
+              
+              <a href="http://localhost:1313/" class="no-style ">My New Hugo Site</a>:~# 
+              <a href='http://localhost:1313/dummy-robotic-arm'>dummy-robotic-arm</a>/<a href='http://localhost:1313/dummy-robotic-arm/6-dof-robot-kinematics'>6-dof-robot-kinematics</a>/</div></header>
+          <nav class="terminal-menu">
+            <ul vocab="https://schema.org/" typeof="BreadcrumbList">
+                
+            </ul>
+          </nav>
+        </div>
+    </div>
+
+    <div class="container " >
+        
+<h1></h1>
+<h1 id="6-dof-robot-kinematics-implementation">6-DOF Robot Kinematics Implementation</h1>
+<p>This document details the implementation of a 6-Degree-of-Freedom (6-DOF) robotic arm kinematics solver, including both forward kinematics (FK) and inverse kinematics (IK) calculations.</p>
+<h2 id="1-core-mathematical-functions">1. Core Mathematical Functions</h2>
+<h3 id="basic-trigonometry">Basic Trigonometry</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">inline</span> <span style="color:#66d9ef">float</span> <span style="color:#a6e22e">cosf</span>(<span style="color:#66d9ef">float</span> x)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> arm_cos_f32(x);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">inline</span> <span style="color:#66d9ef">float</span> <span style="color:#a6e22e">sinf</span>(<span style="color:#66d9ef">float</span> x)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> arm_sin_f32(x);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>These optimized trigonometric functions use ARM&rsquo;s hardware acceleration for improved performance.</p>
+<h3 id="matrix-operations">Matrix Operations</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">MatMultiply</span>(<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">float</span><span style="color:#f92672">*</span> _matrix1, <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">float</span><span style="color:#f92672">*</span> _matrix2, <span style="color:#66d9ef">float</span><span style="color:#f92672">*</span> _matrixOut,
+</span></span><span style="display:flex;"><span>                        <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">int</span> _m, <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">int</span> _l, <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">int</span> _n)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">float</span> tmp;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> i, j, k;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> _m; i<span style="color:#f92672">++</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> (j <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; j <span style="color:#f92672">&lt;</span> _n; j<span style="color:#f92672">++</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            tmp <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.0f</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">for</span> (k <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; k <span style="color:#f92672">&lt;</span> _l; k<span style="color:#f92672">++</span>)
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                tmp <span style="color:#f92672">+=</span> _matrix1[_l <span style="color:#f92672">*</span> i <span style="color:#f92672">+</span> k] <span style="color:#f92672">*</span> _matrix2[_n <span style="color:#f92672">*</span> k <span style="color:#f92672">+</span> j];
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            _matrixOut[_n <span style="color:#f92672">*</span> i <span style="color:#f92672">+</span> j] <span style="color:#f92672">=</span> tmp;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Implements matrix multiplication for:</p>
+<ul>
+<li>Rotation matrix calculations</li>
+<li>Position transformations</li>
+<li>Kinematic chain computations</li>
+</ul>
+<h2 id="2-rotation-conversions">2. Rotation Conversions</h2>
+<h3 id="rotation-matrix-to-euler-angles">Rotation Matrix to Euler Angles</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> RotMatToEulerAngle(<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">float</span><span style="color:#f92672">*</span> _rotationM, <span style="color:#66d9ef">float</span><span style="color:#f92672">*</span> _eulerAngles)
+</span></span></code></pre></div><p>Converts rotation matrices to Euler angles, handling:</p>
+<ul>
+<li>Regular cases</li>
+<li>Singularity cases (gimbal lock)</li>
+<li>Special angle conditions</li>
+</ul>
+<h3 id="euler-angles-to-rotation-matrix">Euler Angles to Rotation Matrix</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> EulerAngleToRotMat(<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">float</span><span style="color:#f92672">*</span> _eulerAngles, <span style="color:#66d9ef">float</span><span style="color:#f92672">*</span> _rotationM)
+</span></span></code></pre></div><p>Converts Euler angles to rotation matrix using:</p>
+<ul>
+<li>Trigonometric calculations</li>
+<li>Sequential rotations</li>
+<li>Standard rotation matrix composition</li>
+</ul>
+<h2 id="3-robot-configuration">3. Robot Configuration</h2>
+<h3 id="initialization">Initialization</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>DOF6Kinematic<span style="color:#f92672">::</span>DOF6Kinematic(<span style="color:#66d9ef">float</span> L_BS, <span style="color:#66d9ef">float</span> D_BS, <span style="color:#66d9ef">float</span> L_AM, <span style="color:#66d9ef">float</span> L_FA, <span style="color:#66d9ef">float</span> D_EW, <span style="color:#66d9ef">float</span> L_WT)
+</span></span></code></pre></div><p>Configures the robot with:</p>
+<ul>
+<li>Base height (L_BS)</li>
+<li>Base offset (D_BS)</li>
+<li>Arm length (L_AM)</li>
+<li>Forearm length (L_FA)</li>
+<li>Elbow-wrist offset (D_EW)</li>
+<li>Wrist length (L_WT)</li>
+</ul>
+<h3 id="dh-parameters">DH Parameters</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">float</span> tmp_DH_matrix[<span style="color:#ae81ff">6</span>][<span style="color:#ae81ff">4</span>] <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>    {<span style="color:#ae81ff">0.0f</span>,            armConfig.L_BASE,    armConfig.D_BASE, <span style="color:#f92672">-</span>(<span style="color:#66d9ef">float</span>) M_PI_2},
+</span></span><span style="display:flex;"><span>    {<span style="color:#f92672">-</span>(<span style="color:#66d9ef">float</span>) M_PI_2, <span style="color:#ae81ff">0.0f</span>,                armConfig.L_ARM,  <span style="color:#ae81ff">0.0f</span>},
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// ...
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>};
+</span></span></code></pre></div><p>Defines Denavit-Hartenberg parameters for:</p>
+<ul>
+<li>Joint offsets</li>
+<li>Link lengths</li>
+<li>Twist angles</li>
+<li>Joint angles</li>
+</ul>
+<h2 id="4-forward-kinematics-fk">4. Forward Kinematics (FK)</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">bool</span> DOF6Kinematic<span style="color:#f92672">::</span>SolveFK(<span style="color:#66d9ef">const</span> DOF6Kinematic<span style="color:#f92672">::</span>Joint6D_t <span style="color:#f92672">&amp;</span>_inputJoint6D, 
+</span></span><span style="display:flex;"><span>                           DOF6Kinematic<span style="color:#f92672">::</span>Pose6D_t <span style="color:#f92672">&amp;</span>_outputPose6D)
+</span></span></code></pre></div><p>The FK solver:</p>
+<ol>
+<li>Takes joint angles as input</li>
+<li>Computes transformation matrices</li>
+<li>Calculates end-effector position and orientation</li>
+<li>Returns results in Cartesian coordinates
+Process:</li>
+<li>Joint angle preprocessing</li>
+<li>Rotation matrix calculation</li>
+<li>Position vector computation</li>
+<li>Final pose composition</li>
+</ol>
+<h2 id="5-inverse-kinematics-ik">5. Inverse Kinematics (IK)</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">bool</span> DOF6Kinematic<span style="color:#f92672">::</span>SolveIK(<span style="color:#66d9ef">const</span> DOF6Kinematic<span style="color:#f92672">::</span>Pose6D_t <span style="color:#f92672">&amp;</span>_inputPose6D,
+</span></span><span style="display:flex;"><span>                           <span style="color:#66d9ef">const</span> Joint6D_t <span style="color:#f92672">&amp;</span>_lastJoint6D,
+</span></span><span style="display:flex;"><span>                           DOF6Kinematic<span style="color:#f92672">::</span>IKSolves_t <span style="color:#f92672">&amp;</span>_outputSolves)
+</span></span></code></pre></div><p>The IK solver handles:</p>
+<ol>
+<li>Multiple solution cases</li>
+<li>Singularity conditions</li>
+<li>Joint limit constraints</li>
+<li>Solution validation</li>
+</ol>
+<h3 id="solution-strategy">Solution Strategy</h3>
+<ol>
+<li>Wrist position calculation</li>
+<li>Shoulder angle computation</li>
+<li>Elbow angle computation</li>
+<li>Wrist angle determination</li>
+</ol>
+<h3 id="special-cases">Special Cases</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (sqrt(P0_w[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">*</span> P0_w[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">+</span> P0_w[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">*</span> P0_w[<span style="color:#ae81ff">1</span>]) <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">0.000001</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Handle singularity case
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><p>Handles:</p>
+<ul>
+<li>Singularities</li>
+<li>Unreachable positions</li>
+<li>Multiple solutions</li>
+<li>Joint limits</li>
+</ul>
+<h2 id="6-utility-functions">6. Utility Functions</h2>
+<h3 id="joint-difference-calculation">Joint Difference Calculation</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>DOF6Kinematic<span style="color:#f92672">::</span>Joint6D_t <span style="color:#66d9ef">operator</span><span style="color:#f92672">-</span>(<span style="color:#66d9ef">const</span> DOF6Kinematic<span style="color:#f92672">::</span>Joint6D_t <span style="color:#f92672">&amp;</span>_joints1,
+</span></span><span style="display:flex;"><span>                                  <span style="color:#66d9ef">const</span> DOF6Kinematic<span style="color:#f92672">::</span>Joint6D_t <span style="color:#f92672">&amp;</span>_joints2)
+</span></span></code></pre></div><p>Enables:</p>
+<ul>
+<li>Joint space calculations</li>
+<li>Path planning</li>
+<li>Movement optimization</li>
+</ul>
+<h2 id="key-features">Key Features</h2>
+<ol>
+<li>
+<p>Performance Optimization</p>
+<ul>
+<li>Hardware-accelerated trigonometry</li>
+<li>Efficient matrix operations</li>
+<li>Minimal memory allocation</li>
+</ul>
+</li>
+<li>
+<p>Robustness</p>
+<ul>
+<li>Singularity handling</li>
+<li>Multiple solution management</li>
+<li>Numerical stability</li>
+</ul>
+</li>
+<li>
+<p>Accuracy</p>
+<ul>
+<li>Precise angle calculations</li>
+<li>Proper handling of angle wrapping</li>
+<li>Consideration of joint limits</li>
+</ul>
+</li>
+<li>
+<p>Flexibility</p>
+<ul>
+<li>Configurable robot dimensions</li>
+<li>Support for different joint configurations</li>
+<li>Adaptable to various robot geometries</li>
+</ul>
+</li>
+</ol>
+<h2 id="mathematical-foundation">Mathematical Foundation</h2>
+<ol>
+<li>
+<p>Forward Kinematics</p>
+<ul>
+<li>DH parameter transformation</li>
+<li>Sequential joint transformations</li>
+<li>End-effector pose calculation</li>
+</ul>
+</li>
+<li>
+<p>Inverse Kinematics</p>
+<ul>
+<li>Geometric approach</li>
+<li>Analytical solution</li>
+<li>Multiple solution handling</li>
+</ul>
+</li>
+<li>
+<p>Rotation Representations</p>
+<ul>
+<li>Euler angles</li>
+<li>Rotation matrices</li>
+<li>Angle conversions</li>
+</ul>
+</li>
+</ol>
+
+
+        
+
+    </div>
+  </body>
+</html>

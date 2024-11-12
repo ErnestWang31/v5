@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>ernest/wheeled-legged-robot/</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="all,follow">
+    <meta name="googlebot" content="index,follow,snippet,archive">
+    <link rel="stylesheet" href="//localhost:1313/hugo-theme-console/css/terminal-0.7.4.min.css">
+    <link rel="stylesheet" href="//localhost:1313/hugo-theme-console/css/animate-4.1.1.min.css">
+    <link rel="stylesheet" href="//localhost:1313/hugo-theme-console/css/console.css">
+    
+      <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+      <![endif]-->
+       <meta property="og:title" content="wheeled-legged robot" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="//localhost:1313/wheeled-legged-robot/" /><meta property="article:published_time" content="2024-01-01T00:00:00+00:00" />
+
+
+
+<meta name="twitter:title" content="wheeled-legged robot"/>
+<meta name="twitter:description" content="Ever watched Boston Dynamics&rsquo; robots pulling off incredible stunts but thought &ldquo;there&rsquo;s got to be a simpler way&rdquo;? After diving into a research paper on wheel-legged robots and seeing the explosion of humanoid robots everywhere, I couldn&rsquo;t shake the feeling that we&rsquo;re overcomplicating robot mobility. So I set out to build something that combines the best of both worlds - the stability of wheels with the adaptability of legs!
+Before jumping into CAD, I laid out some key goals:"/>
+
+</head>
+<body class="terminal">
+    <div class="container">
+        <div class="terminal-nav">
+          <header class="terminal-logo">
+            <div class="logo terminal-prompt">
+              
+              
+              <a href="//localhost:1313/" class="no-style ">ernest</a>:~# 
+              <a href='//localhost:1313/wheeled-legged-robot'>wheeled-legged-robot</a>/</div></header>
+          <nav class="terminal-menu">
+            <ul vocab="https://schema.org/" typeof="BreadcrumbList">
+                
+            </ul>
+          </nav>
+        </div>
+    </div>
+
+    <div class="container " >
+        
+<h1>wheeled-legged robot</h1>
+<p>Ever watched Boston Dynamics&rsquo; robots pulling off incredible stunts but thought &ldquo;there&rsquo;s got to be a simpler way&rdquo;? After diving into a research paper on wheel-legged robots and seeing the explosion of humanoid robots everywhere, I couldn&rsquo;t shake the feeling that we&rsquo;re overcomplicating robot mobility. So I set out to build something that combines the best of both worlds - the stability of wheels with the adaptability of legs!<img src="https://lh7-rt.googleusercontent.com/docsz/AD_4nXew4-WFsULSy8zlU9z0digVlPpTL0ZACiuGoFv8NriuW8JDvFky-f3p3gICxFkK6WqptSHuuh9GcDYdRX-gRsPlHrka5EntRmvjq9Ef0XJ86Gdu9Rc70H7tidh1rEDJlYuBfSfDyR3CqfwGWEetwB6DBYOE?key=zwGjVZ7EjAL1kdZw6LWOIA" alt=""></p>
+<p>Before jumping into CAD, I laid out some key goals:</p>
+<ol>
+<li>
+<p>Stability First: The robot needed to handle rough terrain without the constant balancing act of humanoid designs</p>
+</li>
+<li>
+<p>Keep It Simple: Less components = fewer headaches (and fewer things to break!)</p>
+</li>
+<li>
+<p>Efficiency Matters: Why waste energy constantly maintaining balance when you don&rsquo;t have to?</p>
+</li>
+<li>
+<p>Useful: it had to handle real-world scenarios</p>
+</li>
+</ol>
+<h2 id="leg-designhttpslh7-rtgoogleusercontentcomdocszad_4nxesykljlyj4-1oulhzmdao4hhllze0uao85gehehaph8wm4fpayupe_2tkiu8uhhcfmseo2umfhvzrxrvci8nvkrshj6x4fhcyki409ugp4_x9cbmipufrrhbwv86x3yw1bwc9fhkypfhhjrfsohjungpjxkeyzwgjvz7ejal1kdzw6lwoia">Leg Design<img src="https://lh7-rt.googleusercontent.com/docsz/AD_4nXeSyKljlyJ4-1ouLhzmDao4HhLlZe0UaO85gEHeHaPh8WM4FpaYuPe_2tKiU8uHhCFmSEo2uMfhVZRxrVci8NVkRSHj6X4FhCyki409UGP4_x9CBMiPuFrrhbWv86x3Yw1bWC9FHKYpfHHJrfsoHjUNGPjX?key=zwGjVZ7EjAL1kdZw6LWOIA" alt=""></h2>
+<p>The core innovation of this design centers on the leg mechanism, which comprises four essential components working in harmony. The hip motor drives the system. It acts as the primary actuator. Position feedback enables precise motion control.</p>
+<p>The thigh rod connects to the motor assembly. It bears the primary structural loads. This component is crucial for the parallelogram mechanism.</p>
+<p>The drive rod maintains geometric alignment. It keeps platform orientation stable. Vertical motion becomes decoupled from body orientation.<img src="https://lh7-rt.googleusercontent.com/docsz/AD_4nXcqyTRPj0r7Ss1IFxkfjjttLgarJkX0wqZ_CwkELP1vn67LvrQNu_aCuAZ0h20Ha1Hrqa6eRRlj2NSUkwE-OGjMViUqsjl1PltSl10rSWBlKoGR3s1dsX7dIvc5xHsEwEZncWIM3clXylOsPhv2dNRaU2Y?key=zwGjVZ7EjAL1kdZw6LWOIA" alt=""></p>
+<p>The calf rod interfaces with the ground. It integrates the wheel assembly. Compliance mechanisms ensure smooth operation.</p>
+<p>A single degree of freedom defines this system. It uses a parallelogram mechanism. This approach offers key advantages. The leg trajectory stays independent from body orientation. Control system complexity decreases significantly. Energy efficiency improves through simpler actuation.<img src="https://lh7-rt.googleusercontent.com/docsz/AD_4nXedi1FlDbzOI__mvcOOB--Rdrw5rRaNwog74DBNICCuDbBPUsr_Aud5Ok0C7stFAK80p4mLMaIBujuOGMetdrc--R3_-LgSUcPkiDp4Z1ynqEQzyGkSPuIm2GKLYAxURHsCxIpU3jyy8CIaw7h7IWpVdGlC?key=zwGjVZ7EjAL1kdZw6LWOIA" alt=""></p>
+<h2 id="control-system">Control System</h2>
+<p>I designed a dual-loop control architecture. The system separates body stabilization from leg motion. This separation maximizes stability performance.</p>
+<p>Body stabilization uses LQR control. I selected four key state variables. Platform distance forms the position basis. Speed captures dynamic motion. Angle measures orientation deviation. Angular velocity completes the state feedback. Motor encoders deliver position data. An IMU provides orientation measurements.</p>
+<p>I implemented state tracking as follows:</p>
+<p><img src="https://lh7-rt.googleusercontent.com/docsz/AD_4nXcuKeKEDXf-y81CwzDnIIFfAy9U-2ZLAE3mxQ6PB2-SrJ7GV0jyrMfqW9zdApTltTp-qdN8Hhfj9qWAXp_JppoltPIwDj-TcqWbhg0uOBvPdlvhZAyIS2YIizDR45kEYe43lYiBVB2KgyyCOhnMZ-52wH5r?key=zwGjVZ7EjAL1kdZw6LWOIA" alt=""></p>
+<p>The system uses PID controllers for output generation. Each controller targets specific motion aspects. The outputs combine seamlessly. Real-time processing ensures smooth operation:</p>
+<p><img src="https://lh7-rt.googleusercontent.com/docsz/AD_4nXf0leDTirXxuvUSI5aE8FTTjFAq9dma6dB7-WVxsR8SKamI_VFUUcXlI34lpyYEDaV_DjK9a4xnSYhxy5Pb6YeJlYeaG3_6jinm-1FdBFrJwAknIX2_SfR4URyBNRzYfsyJ_XnLnMtWTKRldI2rXxF_s-A?key=zwGjVZ7EjAL1kdZw6LWOIA" alt=""></p>
+<p>I chose ADRC for leg motion control. This handles terrain variations effectively. It estimates unknown surface conditions. Compensation occurs automatically. The robot maintains stability across different surfaces.</p>
+<h2 id="electronic-integration">Electronic Integration</h2>
+<p><img src="https://lh7-rt.googleusercontent.com/docsz/AD_4nXcZy2I-gntY09HXaG7NEWq2rUOQl2oaE2AmwDOTZQPHWB9viDcAQfZDVWtWp7OWyhvMCRqA5O6fgQf9We3fc9rFU1p1T08UdOznbeJxoPhIyrvt8ENrCWszlPM0U4_RJ6Ooi1PCUUnL9w8yP0pDjJoLxNLr?key=zwGjVZ7EjAL1kdZw6LWOIA" alt=""><img src="https://lh7-rt.googleusercontent.com/docsz/AD_4nXcp_vb9g7Ayr6MCBLAFtI5KSGyQAdJPCEBnA0qi_tyLEZdtPdGfeIZ8rS4g8kyNUYSD9omZVeii5l5cIyrnvaz3iqIUeRfXwVVzuggcaF113Xm9Qn6Dz8VV_CmVoG94ET41U1gRps9ChHY6uS3AjF8LuTwM?key=zwGjVZ7EjAL1kdZw6LWOIA" alt="">**</p>
+
+
+        
+
+    </div>
+  </body>
+</html>

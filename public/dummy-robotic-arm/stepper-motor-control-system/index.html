@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>My New Hugo Site/dummy-robotic-arm/stepper-motor-control-system/</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="all,follow">
+    <meta name="googlebot" content="index,follow,snippet,archive">
+    <link rel="stylesheet" href="http://localhost:1313/hugo-theme-console/css/terminal-0.7.4.min.css">
+    <link rel="stylesheet" href="http://localhost:1313/hugo-theme-console/css/animate-4.1.1.min.css">
+    <link rel="stylesheet" href="http://localhost:1313/hugo-theme-console/css/console.css">
+    
+      <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+      <![endif]-->
+       <meta property="og:title" content="" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/dummy-robotic-arm/stepper-motor-control-system/" />
+
+
+<meta name="twitter:title" content=""/>
+<meta name="twitter:description" content="This document explains the implementation of a stepper motor controller used in robotics applications. The system provides comprehensive control over stepper motors with built-in safety features and precise movement control.
+1. Motor Configuration
+The motor controller is initialized with specific parameters for each motor:
+CtrlStepMotor::CtrlStepMotor(CAN_HandleTypeDef* _hcan, uint8_t _id, bool _inverse,
+                             uint8_t _reduction, float _angleLimitMin, float _angleLimitMax)
+Each motor has:
+
+A unique ID for communication
+Direction settings (normal or inverse)
+Gear reduction ratio
+Angle limits for safety
+
+2. Communication Protocol
+The system uses CAN bus communication with a specific message format:"/>
+
+</head>
+<body class="terminal">
+    <div class="container">
+        <div class="terminal-nav">
+          <header class="terminal-logo">
+            <div class="logo terminal-prompt">
+              
+              
+              <a href="http://localhost:1313/" class="no-style ">My New Hugo Site</a>:~# 
+              <a href='http://localhost:1313/dummy-robotic-arm'>dummy-robotic-arm</a>/<a href='http://localhost:1313/dummy-robotic-arm/stepper-motor-control-system'>stepper-motor-control-system</a>/</div></header>
+          <nav class="terminal-menu">
+            <ul vocab="https://schema.org/" typeof="BreadcrumbList">
+                
+            </ul>
+          </nav>
+        </div>
+    </div>
+
+    <div class="container " >
+        
+<h1></h1>
+<p>This document explains the implementation of a stepper motor controller used in robotics applications. The system provides comprehensive control over stepper motors with built-in safety features and precise movement control.</p>
+<h2 id="1-motor-configuration">1. Motor Configuration</h2>
+<p>The motor controller is initialized with specific parameters for each motor:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>CtrlStepMotor<span style="color:#f92672">::</span>CtrlStepMotor(CAN_HandleTypeDef<span style="color:#f92672">*</span> _hcan, <span style="color:#66d9ef">uint8_t</span> _id, <span style="color:#66d9ef">bool</span> _inverse,
+</span></span><span style="display:flex;"><span>                             <span style="color:#66d9ef">uint8_t</span> _reduction, <span style="color:#66d9ef">float</span> _angleLimitMin, <span style="color:#66d9ef">float</span> _angleLimitMax)
+</span></span></code></pre></div><p>Each motor has:</p>
+<ul>
+<li>A unique ID for communication</li>
+<li>Direction settings (normal or inverse)</li>
+<li>Gear reduction ratio</li>
+<li>Angle limits for safety</li>
+</ul>
+<h2 id="2-communication-protocol">2. Communication Protocol</h2>
+<p>The system uses CAN bus communication with a specific message format:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>txHeader <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>    .StdId <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>,
+</span></span><span style="display:flex;"><span>    .IDE <span style="color:#f92672">=</span> CAN_ID_STD,
+</span></span><span style="display:flex;"><span>    .RTR <span style="color:#f92672">=</span> CAN_RTR_DATA,
+</span></span><span style="display:flex;"><span>    .DLC <span style="color:#f92672">=</span> <span style="color:#ae81ff">8</span>,
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>This protocol enables:</p>
+<ul>
+<li>Unique message identification</li>
+<li>Standard data format</li>
+<li>Real-time communication</li>
+<li>Status feedback</li>
+</ul>
+<h2 id="3-basic-control-functions">3. Basic Control Functions</h2>
+<h3 id="core-control-methods">Core Control Methods</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> CtrlStepMotor<span style="color:#f92672">::</span>SetEnable(<span style="color:#66d9ef">bool</span> _enable)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> CtrlStepMotor<span style="color:#f92672">::</span>SetCurrentSetPoint(<span style="color:#66d9ef">float</span> _val)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> CtrlStepMotor<span style="color:#f92672">::</span>SetVelocitySetPoint(<span style="color:#66d9ef">float</span> _val)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> CtrlStepMotor<span style="color:#f92672">::</span>SetPositionSetPoint(<span style="color:#66d9ef">float</span> _val)
+</span></span></code></pre></div><p>These functions provide fundamental control:</p>
+<ul>
+<li>Enable/disable motor operation</li>
+<li>Current control for torque adjustment</li>
+<li>Velocity control</li>
+<li>Position control</li>
+</ul>
+<h2 id="4-advanced-movement-control">4. Advanced Movement Control</h2>
+<h3 id="sophisticated-motion-control">Sophisticated Motion Control</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> CtrlStepMotor<span style="color:#f92672">::</span>SetPositionWithVelocityLimit(<span style="color:#66d9ef">float</span> _pos, <span style="color:#66d9ef">float</span> _vel)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> CtrlStepMotor<span style="color:#f92672">::</span>SetAcceleration(<span style="color:#66d9ef">float</span> _val)
+</span></span></code></pre></div><p>These methods enable:</p>
+<ul>
+<li>Position control with speed limits</li>
+<li>Acceleration/deceleration control</li>
+<li>Smooth movement profiles</li>
+</ul>
+<h2 id="5-safety-features">5. Safety Features</h2>
+<h3 id="protection-systems">Protection Systems</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> CtrlStepMotor<span style="color:#f92672">::</span>SetCurrentLimit(<span style="color:#66d9ef">float</span> _val)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> CtrlStepMotor<span style="color:#f92672">::</span>SetEnableStallProtect(<span style="color:#66d9ef">bool</span> _enable)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> CtrlStepMotor<span style="color:#f92672">::</span>GetTemp()
+</span></span></code></pre></div><p>Safety mechanisms include:</p>
+<ul>
+<li>Current limiting for overheating prevention</li>
+<li>Stall protection</li>
+<li>Temperature monitoring</li>
+<li>Automatic shutdown on fault conditions</li>
+</ul>
+<h2 id="6-motor-tuning-pid-control">6. Motor Tuning (PID Control)</h2>
+<h3 id="pid-parameters">PID Parameters</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> CtrlStepMotor<span style="color:#f92672">::</span>SetDceKp(<span style="color:#66d9ef">int32_t</span> _val)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> CtrlStepMotor<span style="color:#f92672">::</span>SetDceKi(<span style="color:#66d9ef">int32_t</span> _val)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> CtrlStepMotor<span style="color:#f92672">::</span>SetDceKd(<span style="color:#66d9ef">int32_t</span> _val)
+</span></span></code></pre></div><p>PID control enables:</p>
+<ul>
+<li>Precise position control</li>
+<li>Error elimination</li>
+<li>Oscillation reduction</li>
+<li>Optimal response characteristics</li>
+</ul>
+<h2 id="7-configuration-management">7. Configuration Management</h2>
+<h3 id="system-configuration">System Configuration</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> CtrlStepMotor<span style="color:#f92672">::</span>ApplyPositionAsHome()
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> CtrlStepMotor<span style="color:#f92672">::</span>SetEnableOnBoot(<span style="color:#66d9ef">bool</span> _enable)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> CtrlStepMotor<span style="color:#f92672">::</span>EraseConfigs()
+</span></span></code></pre></div><p>Configuration features:</p>
+<ul>
+<li>Home position setting</li>
+<li>Boot behavior configuration</li>
+<li>Factory reset capabilities</li>
+<li>Persistent settings storage</li>
+</ul>
+<h2 id="8-angle-calculations">8. Angle Calculations</h2>
+<h3 id="position-control">Position Control</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> CtrlStepMotor<span style="color:#f92672">::</span>SetAngle(<span style="color:#66d9ef">float</span> _angle)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    _angle <span style="color:#f92672">=</span> inverseDirection <span style="color:#f92672">?</span> <span style="color:#f92672">-</span>_angle : _angle;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">float</span> stepMotorCnt <span style="color:#f92672">=</span> _angle <span style="color:#f92672">/</span> <span style="color:#ae81ff">360.0f</span> <span style="color:#f92672">*</span> (<span style="color:#66d9ef">float</span>) reduction;
+</span></span><span style="display:flex;"><span>    SetPositionSetPoint(stepMotorCnt);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>This system handles:</p>
+<ul>
+<li>Angle to step conversion</li>
+<li>Direction compensation</li>
+<li>Gear ratio calculations</li>
+<li>Precise positioning</li>
+</ul>
+<h2 id="key-features-summary">Key Features Summary</h2>
+<ol>
+<li>
+<p>Real-time Control</p>
+<ul>
+<li>CAN bus communication</li>
+<li>Immediate response</li>
+<li>Status feedback</li>
+</ul>
+</li>
+<li>
+<p>Safety Systems</p>
+<ul>
+<li>Current limitation</li>
+<li>Temperature monitoring</li>
+<li>Stall protection</li>
+<li>Emergency stop capability</li>
+</ul>
+</li>
+<li>
+<p>Movement Control</p>
+<ul>
+<li>Precise positioning</li>
+<li>Velocity control</li>
+<li>Acceleration management</li>
+<li>Smooth motion profiles</li>
+</ul>
+</li>
+<li>
+<p>Configuration Options</p>
+<ul>
+<li>Persistent settings</li>
+<li>Boot behavior</li>
+<li>Home position</li>
+<li>System calibration</li>
+</ul>
+</li>
+<li>
+<p>Protection Mechanisms</p>
+<ul>
+<li>Overheating prevention</li>
+<li>Stall detection</li>
+<li>Current limiting</li>
+<li>Position limits</li>
+</ul>
+</li>
+</ol>
+<h2 id="system-benefits">System Benefits</h2>
+<p>The implementation ensures:</p>
+<ol>
+<li>Precise movement control through PID tuning</li>
+<li>Safe operation with multiple protection layers</li>
+<li>Flexible configuration for different applications</li>
+<li>Reliable communication through CAN bus</li>
+<li>Comprehensive status monitoring</li>
+<li>Easy integration with larger systems</li>
+</ol>
+
+
+        
+
+    </div>
+  </body>
+</html>

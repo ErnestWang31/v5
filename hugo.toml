@@ -1,0 +1,4 @@
+baseURL = 'ernestwang.ca'
+languageCode = 'en-us'
+title = 'ernest'
+theme = "hugo-theme-console"

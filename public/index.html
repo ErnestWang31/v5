@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  
+    <meta name="generator" content="Hugo 0.138.0"><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Hi, I'm Ernest!</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="all,follow">
+    <meta name="googlebot" content="index,follow,snippet,archive">
+    <link rel="stylesheet" href="http://localhost:1313/hugo-theme-console/css/terminal-0.7.4.min.css">
+    <link rel="stylesheet" href="http://localhost:1313/hugo-theme-console/css/animate-4.1.1.min.css">
+    <link rel="stylesheet" href="http://localhost:1313/hugo-theme-console/css/console.css">
+    
+      
+       
+      <link href="http://localhost:52132/index.xml" rel="alternate" type="application/rss+xml" title="Hi, I'm Ernest!" />
+    <meta property="og:title" content="Hi, I'm Ernest!" />
+<meta property="og:description" content="" />
+
+<meta property="og:type" content="website" />
+<meta property="og:url" content="http://localhost:1313/" />
+
+
+<meta name="twitter:title" content="Hi, I'm Ernest!"/>
+<meta name="twitter:description" content=""/>
+
+<style>
+    .image-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 200px); /* Smaller containers */
+        gap: 1rem;
+        padding: 1rem;
+        justify-content: start;
+    }
+
+    .image-grid-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    /* Update project container to use flex column */
+    .project {
+        transition: transform 0.2s;
+        border: 2px solid #0a3570;
+        padding: 0.25rem;
+        border-radius: 8px;
+        width: 200px !important;
+        height: 200px !important;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: #fff;
+        margin-bottom: 0; /* remove bottom margin */
+    }
+
+    /* Add styles for project title */
+    .project-title {
+        font-size: 0.7rem;
+        color: #333;
+        margin-top: 0.1rem;
+        text-align: center;
+        font-weight: 500;
+    }
+
+    .project-label {
+        font-size: 0.9rem;
+        color: #333;
+        text-align: center;
+        font-weight: 500;
+        margin-top: 0.25rem;
+    }
+
+    /* Adjust image size to make room for text */
+    .project img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        margin-bottom: 0.5rem;
+        display: block;
+        transition: transform 0.2s;
+        margin: auto;
+    }
+
+    .project.coming-soon {
+        background-color: #f5f5f5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-style: italic;
+        color: #666;
+    }
+
+    /* General image styles for other projects */
+  
+
+    .project:nth-child(odd):hover img {
+        transform: rotate(5deg);  
+    }
+
+    .project:nth-child(even):hover img {
+        transform: rotate(-5deg);  
+    }
+
+    /* Remove margin-left styles */
+    .project:nth-child(2) img,
+    .project:nth-child(3) img,
+    .project:nth-child(4) img {
+        margin-left: 2;
+    }
+
+    /* Simplified hover effects */
+    .project:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 10px rgba(120, 138, 163, 0.2);
+    }
+
+    .project:hover img {
+        transform: scale(0.98);
+    }
+
+    .project.sample {
+        height: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .project .coming-soon {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f5f5f5;
+    }
+
+    /* Fallback for browsers that don't support aspect-ratio */
+    @supports not (aspect-ratio: 1) {
+        .project {
+            padding-top: 100%;
+        }
+        
+        .project > * {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    .terminal-logo .logo {
+        font-family: 'Merriweather', serif;
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+    }
+
+    .terminal-logo .logo a {
+        color: #fff;
+        text-decoration: none;
+    }
+
+    .terminal-logo .logo a:hover {
+        color: #ddd;
+    }
+
+   
+    .coming-soon {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 1rem;
+        font-weight: 400;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        font-family: monospace;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+    }
+
+    .project.sample:hover .coming-soon {
+        letter-spacing: 3px;
+        text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+    }
+
+    h1 {
+        font-size: 1.2rem;
+        margin-top: 1.2rem;    /* Reduced from 2rem */
+        margin-bottom: 0.5rem; /* Reduced from 1rem */
+    }
+
+     
+    .colored-text {
+        color: #0a3570;  
+    }
+
+    ul {
+        margin: 0;
+        padding: 0;
+        margin-bottom: 0rem; /* Reduced from default */
+        list-style-type: none !important;
+        padding-left: 0;
+    }
+
+    li {
+        margin-bottom: 0.4rem; /* Reduced from 0.8rem */
+        line-height: 1.4;     /* Tightened line height */
+    }
+
+    .container {
+        padding: 0 1rem;
+    }
+
+    .terminal-nav {
+        margin-bottom: -2rem; /* Reduced from default */
+    }
+</style>
+
+</head>
+<body class="terminal">
+    <div class="container">
+        <div class="terminal-nav">
+          <header class="terminal-logo">
+            <div class="logo terminal-prompt">
+              
+              
+              <a href="http://localhost:1313/" style="font-size: 1.4rem;">Hi, I'm Ernest!</a>
+              </div></header>
+          <nav class="terminal-menu">
+            <ul vocab="https://schema.org/" typeof="BreadcrumbList">
+                
+            </ul>
+          </nav>
+        </div>
+    </div>
+
+    <div class="container " >
+        
+
+        <h1>About</h1>
+<ul>
+  <li>Mechatronics Engineering student @ UWaterloo.</li>
+  <li>Building cool robotics applications.</li>
+</ul>
+
+<h1>Experiences</h1>
+
+<ul>
+  <li>Currently Embedded and Product Development for telematic devices @ <a href="https://www.geotab.com">Geotab</a></li>
+  <li>Co-founded University of Waterloo's first humanoid robotics design team - <a href="https://uw-robosoccer.github.io/">UW RoboSoccer</a> </li>
+  <li>Previously SxS Product Development @ <a href="https://www.BRP.com">BRP</a> & Acoustic tester prototyping @ <a href="https://paragonsystems.net/">Paragon Systems</a></li>
+</ul>
+
+<h1>Projects</h1>
+
+<div class="image-grid">
+    <div class="image-grid-item">
+        <div class="project">
+            <a href="/robotics-arm">
+                <img src="dummy_image.png" alt="Robotic Arm">
+            </a>
+        </div>
+        <span class="project-title">Dummy Robotic Arm</span>
+    </div>
+
+    <div class="image-grid-item">
+        <div class="project">
+            <a href="/legged-robot">
+                <img src="legged-wheeled.png" alt="Legged Robot">
+            </a>
+        </div>
+        <span class="project-title">Wheeled-Legged Robot</span>
+    </div>
+
+    <div class="image-grid-item">
+        <div class="project">
+            <a href="/legged-robot">
+                <img src="robocup.png" alt="Robocup">
+            </a>
+        </div>
+        <span class="project-title">RoboSoccer Humanoid</span>
+    </div>
+    <div class="image-grid-item">
+        <div class="project">
+            <a href="/legged-robot">
+                <img src="bionic_hand.png" alt="Bionic Hand">
+            </a>
+        </div>
+        <span class="project-title">Bionic Hand - WIP</span>
+    </div>
+
+    <div class="image-grid-item">
+        <div class="project coming-soon">
+            Coming Soon
+        </div>
+        <span class="project-title"></span>
+    </div>
+    <div class="image-grid-item">
+        <div class="project coming-soon">
+            Coming Soon
+        </div>
+        <span class="project-title"></span>
+    </div>
+</div>
+
+
+  </body>
+</html>
+</a></div>

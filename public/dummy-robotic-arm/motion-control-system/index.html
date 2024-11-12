@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>My New Hugo Site/dummy-robotic-arm/motion-control-system/</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="all,follow">
+    <meta name="googlebot" content="index,follow,snippet,archive">
+    <link rel="stylesheet" href="http://localhost:1313/hugo-theme-console/css/terminal-0.7.4.min.css">
+    <link rel="stylesheet" href="http://localhost:1313/hugo-theme-console/css/animate-4.1.1.min.css">
+    <link rel="stylesheet" href="http://localhost:1313/hugo-theme-console/css/console.css">
+    
+      <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+      <![endif]-->
+       <meta property="og:title" content="" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/dummy-robotic-arm/motion-control-system/" />
+
+
+<meta name="twitter:title" content=""/>
+<meta name="twitter:description" content="This document details the implementation of a  motion control system that includes motion planning and motor control for precise movement control.
+1. Motion Planner
+Overview
+The Motion Planner implements various tracking mechanisms for smooth motion control:
+
+Current tracking
+Velocity tracking
+Position tracking
+Position interpolation
+Trajectory tracking
+
+Tracker Components
+Current Tracker
+void MotionPlanner::CurrentTracker::CalcSoftGoal(int32_t _goalCurrent)
+{
+    int32_t deltaCurrent = _goalCurrent - trackCurrent;
+    // Current ramping logic
+}
+Features:
+
+Smooth current transitions
+Current limiting
+Bi-directional control
+
+Velocity Tracker
+void MotionPlanner::VelocityTracker::CalcSoftGoal(int32_t _goalVelocity)
+{
+    int32_t deltaVelocity = _goalVelocity - trackVelocity;
+    // Velocity ramping logic
+}
+Implements:"/>
+
+</head>
+<body class="terminal">
+    <div class="container">
+        <div class="terminal-nav">
+          <header class="terminal-logo">
+            <div class="logo terminal-prompt">
+              
+              
+              <a href="http://localhost:1313/" class="no-style ">My New Hugo Site</a>:~# 
+              <a href='http://localhost:1313/dummy-robotic-arm'>dummy-robotic-arm</a>/<a href='http://localhost:1313/dummy-robotic-arm/motion-control-system'>motion-control-system</a>/</div></header>
+          <nav class="terminal-menu">
+            <ul vocab="https://schema.org/" typeof="BreadcrumbList">
+                
+            </ul>
+          </nav>
+        </div>
+    </div>
+
+    <div class="container " >
+        
+<h1></h1>
+<p>This document details the implementation of a  motion control system that includes motion planning and motor control for precise movement control.</p>
+<h2 id="1-motion-planner">1. Motion Planner</h2>
+<h3 id="overview">Overview</h3>
+<p>The Motion Planner implements various tracking mechanisms for smooth motion control:</p>
+<ul>
+<li>Current tracking</li>
+<li>Velocity tracking</li>
+<li>Position tracking</li>
+<li>Position interpolation</li>
+<li>Trajectory tracking</li>
+</ul>
+<h3 id="tracker-components">Tracker Components</h3>
+<h4 id="current-tracker">Current Tracker</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> MotionPlanner<span style="color:#f92672">::</span>CurrentTracker<span style="color:#f92672">::</span>CalcSoftGoal(<span style="color:#66d9ef">int32_t</span> _goalCurrent)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int32_t</span> deltaCurrent <span style="color:#f92672">=</span> _goalCurrent <span style="color:#f92672">-</span> trackCurrent;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Current ramping logic
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><p>Features:</p>
+<ul>
+<li>Smooth current transitions</li>
+<li>Current limiting</li>
+<li>Bi-directional control</li>
+</ul>
+<h4 id="velocity-tracker">Velocity Tracker</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> MotionPlanner<span style="color:#f92672">::</span>VelocityTracker<span style="color:#f92672">::</span>CalcSoftGoal(<span style="color:#66d9ef">int32_t</span> _goalVelocity)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int32_t</span> deltaVelocity <span style="color:#f92672">=</span> _goalVelocity <span style="color:#f92672">-</span> trackVelocity;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Velocity ramping logic
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><p>Implements:</p>
+<ul>
+<li>Velocity ramping</li>
+<li>Acceleration control</li>
+<li>Zero-crossing handling</li>
+</ul>
+<h4 id="position-tracker">Position Tracker</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> MotionPlanner<span style="color:#f92672">::</span>PositionTracker<span style="color:#f92672">::</span>CalcSoftGoal(<span style="color:#66d9ef">int32_t</span> _goalPosition)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int32_t</span> deltaPosition <span style="color:#f92672">=</span> _goalPosition <span style="color:#f92672">-</span> trackPosition;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Position and velocity profile generation
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><p>Features:</p>
+<ul>
+<li>Position profiling</li>
+<li>Velocity limiting</li>
+<li>Smooth acceleration/deceleration</li>
+</ul>
+<h2 id="2-motor-control">2. Motor Control</h2>
+<h3 id="core-control-loop">Core Control Loop</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> Motor<span style="color:#f92672">::</span>CloseLoopControlTick()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 1. Update encoder data
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// 2. Estimate velocity and position
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// 3. Calculate control output
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// 4. Apply motor commands
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><h3 id="control-modes">Control Modes</h3>
+<h4 id="current-control">Current Control</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> Motor<span style="color:#f92672">::</span>Controller<span style="color:#f92672">::</span>CalcCurrentToOutput(<span style="color:#66d9ef">int32_t</span> current)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    focCurrent <span style="color:#f92672">=</span> current;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Calculate FOC position and apply current vector
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><p>Features:</p>
+<ul>
+<li>Field-Oriented Control (FOC)</li>
+<li>Current limiting</li>
+<li>Phase advance compensation</li>
+</ul>
+<h4 id="velocity-control-pid">Velocity Control (PID)</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> Motor<span style="color:#f92672">::</span>Controller<span style="color:#f92672">::</span>CalcPidToOutput(<span style="color:#66d9ef">int32_t</span> _speed)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// PID control implementation for velocity
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    config<span style="color:#f92672">-&gt;</span>pid.vError <span style="color:#f92672">=</span> _speed <span style="color:#f92672">-</span> estVelocity;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Calculate and apply control output
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><p>Implements:</p>
+<ul>
+<li>PID control</li>
+<li>Anti-windup</li>
+<li>Output limiting</li>
+</ul>
+<h4 id="position-control-dce">Position Control (DCE)</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> Motor<span style="color:#f92672">::</span>Controller<span style="color:#f92672">::</span>CalcDceToOutput(<span style="color:#66d9ef">int32_t</span> _location, <span style="color:#66d9ef">int32_t</span> _speed)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Position and velocity error calculation
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// DCE (Dynamic Control Enhancement) implementation
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><p>Features:</p>
+<ul>
+<li>Position tracking</li>
+<li>Velocity feedforward</li>
+<li>Dynamic error compensation</li>
+</ul>
+<h2 id="3-safety-features">3. Safety Features</h2>
+<h3 id="stall-protection">Stall Protection</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#75715e">// Stall detection logic
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">if</span> (current <span style="color:#f92672">==</span> config.motionParams.ratedCurrent <span style="color:#f92672">&amp;&amp;</span>
+</span></span><span style="display:flex;"><span>    abs(controller<span style="color:#f92672">-&gt;</span>estVelocity) <span style="color:#f92672">&lt;</span> MOTOR_ONE_CIRCLE_SUBDIVIDE_STEPS <span style="color:#f92672">/</span> <span style="color:#ae81ff">5</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    controller<span style="color:#f92672">-&gt;</span>stalledTime <span style="color:#f92672">+=</span> motionPlanner.CONTROL_PERIOD;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Handle stall condition
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><h3 id="overload-protection">Overload Protection</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (current <span style="color:#f92672">==</span> config.motionParams.ratedCurrent)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    controller<span style="color:#f92672">-&gt;</span>overloadTime <span style="color:#f92672">+=</span> motionPlanner.CONTROL_PERIOD;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Handle overload condition
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><h2 id="4-state-management">4. State Management</h2>
+<h3 id="motor-states">Motor States</h3>
+<ul>
+<li><code>STATE_NO_CALIB</code>: Uncalibrated</li>
+<li><code>STATE_STOP</code>: Stopped</li>
+<li><code>STATE_STALL</code>: Stalled</li>
+<li><code>STATE_OVERLOAD</code>: Overloaded</li>
+<li><code>STATE_FINISH</code>: Target reached</li>
+<li><code>STATE_RUNNING</code>: In motion</li>
+</ul>
+<h3 id="operating-modes">Operating Modes</h3>
+<ul>
+<li><code>MODE_STEP_DIR</code>: Step/Direction input</li>
+<li><code>MODE_COMMAND_POSITION</code>: Position control</li>
+<li><code>MODE_COMMAND_VELOCITY</code>: Velocity control</li>
+<li><code>MODE_COMMAND_CURRENT</code>: Current control</li>
+<li><code>MODE_COMMAND_TRAJECTORY</code>: Trajectory following</li>
+</ul>
+<h2 id="5-performance-features">5. Performance Features</h2>
+<h3 id="position-estimation">Position Estimation</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>controller<span style="color:#f92672">-&gt;</span>estVelocityIntegral <span style="color:#f92672">+=</span> (
+</span></span><span style="display:flex;"><span>    (controller<span style="color:#f92672">-&gt;</span>realPosition <span style="color:#f92672">-</span> controller<span style="color:#f92672">-&gt;</span>realPositionLast) <span style="color:#f92672">*</span> motionPlanner.CONTROL_FREQUENCY
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">+</span> ((controller<span style="color:#f92672">-&gt;</span>estVelocity <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">5</span>) <span style="color:#f92672">-</span> controller<span style="color:#f92672">-&gt;</span>estVelocity)
+</span></span><span style="display:flex;"><span>);
+</span></span></code></pre></div><p>Implements:</p>
+<ul>
+<li>Velocity estimation</li>
+<li>Position prediction</li>
+<li>Lead angle compensation</li>
+</ul>
+<h3 id="motion-optimization">Motion Optimization</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">float</span> pMax <span style="color:#f92672">=</span> (<span style="color:#66d9ef">float</span>) context<span style="color:#f92672">-&gt;</span>config.motionParams.ratedVelocityAcc <span style="color:#f92672">*</span> _time <span style="color:#f92672">*</span> _time <span style="color:#f92672">/</span> <span style="color:#ae81ff">4</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> ((<span style="color:#66d9ef">float</span>) deltaPos <span style="color:#f92672">&gt;</span> pMax)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Optimize trajectory for time/distance constraints
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><p>Features:</p>
+<ul>
+<li>Time-optimal trajectories</li>
+<li>Velocity/acceleration limiting</li>
+<li>Path optimization</li>
+</ul>
+<h2 id="6-system-integration">6. System Integration</h2>
+<h3 id="configuration-management">Configuration Management</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> Motor<span style="color:#f92672">::</span>Controller<span style="color:#f92672">::</span>AttachConfig(Motor<span style="color:#f92672">::</span>Controller<span style="color:#f92672">::</span>Config_t<span style="color:#f92672">*</span> _config)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    config <span style="color:#f92672">=</span> _config;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Initialize control parameters
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><h3 id="hardware-interfaces">Hardware Interfaces</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> Motor<span style="color:#f92672">::</span>AttachEncoder(EncoderBase<span style="color:#f92672">*</span> _encoder)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> Motor<span style="color:#f92672">::</span>AttachDriver(DriverBase<span style="color:#f92672">*</span> _driver)
+</span></span></code></pre></div><p>Supports:</p>
+<ul>
+<li>Multiple encoder types</li>
+<li>Various motor drivers</li>
+<li>Flexible configuration</li>
+</ul>
+
+
+        
+
+    </div>
+  </body>
+</html>

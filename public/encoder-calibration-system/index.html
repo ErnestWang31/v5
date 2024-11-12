@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>ernest/encoder-calibration-system/</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="all,follow">
+    <meta name="googlebot" content="index,follow,snippet,archive">
+    <link rel="stylesheet" href="//localhost:1313/hugo-theme-console/css/terminal-0.7.4.min.css">
+    <link rel="stylesheet" href="//localhost:1313/hugo-theme-console/css/animate-4.1.1.min.css">
+    <link rel="stylesheet" href="//localhost:1313/hugo-theme-console/css/console.css">
+    
+      <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+      <![endif]-->
+       <meta property="og:title" content="" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="//localhost:1313/encoder-calibration-system/" />
+
+
+<meta name="twitter:title" content=""/>
+<meta name="twitter:description" content="This document details the implementation of an encoder calibration system for precise stepper motor position control.
+1. System Overview
+Basic Architecture
+class EncoderBase {
+    typedef struct {
+        uint16_t rawAngle;          // raw data
+        uint16_t rectifiedAngle;    // calibrated rawAngle data
+        bool rectifyValid;
+    } AngleData_t;
+
+    const int32_t RESOLUTION = ((int32_t)((0x00000001U) &lt;&lt; 14)); // 16384 points
+};
+Key features:
+
+14-bit resolution (16384 positions)
+Raw and calibrated angle tracking
+Validation system for calibration data
+
+2. Calibration Process
+State Machine
+typedef enum {
+    CALI_DISABLE = 0x00,
+    CALI_FORWARD_PREPARE,
+    CALI_FORWARD_MEASURE,
+    CALI_BACKWARD_RETURN,
+    CALI_BACKWARD_GAP_DISMISS,
+    CALI_BACKWARD_MEASURE,
+    CALI_CALCULATING,
+} State_t;
+Calibration steps:"/>
+
+</head>
+<body class="terminal">
+    <div class="container">
+        <div class="terminal-nav">
+          <header class="terminal-logo">
+            <div class="logo terminal-prompt">
+              
+              
+              <a href="//localhost:1313/" class="no-style ">ernest</a>:~# 
+              <a href='//localhost:1313/encoder-calibration-system'>encoder-calibration-system</a>/</div></header>
+          <nav class="terminal-menu">
+            <ul vocab="https://schema.org/" typeof="BreadcrumbList">
+                
+            </ul>
+          </nav>
+        </div>
+    </div>
+
+    <div class="container " >
+        
+<h1></h1>
+<p>This document details the implementation of an encoder calibration system for precise stepper motor position control.</p>
+<h2 id="1-system-overview">1. System Overview</h2>
+<h3 id="basic-architecture">Basic Architecture</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">EncoderBase</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">uint16_t</span> rawAngle;          <span style="color:#75715e">// raw data
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">uint16_t</span> rectifiedAngle;    <span style="color:#75715e">// calibrated rawAngle data
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">bool</span> rectifyValid;
+</span></span><span style="display:flex;"><span>    } AngleData_t;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">int32_t</span> RESOLUTION <span style="color:#f92672">=</span> ((<span style="color:#66d9ef">int32_t</span>)((<span style="color:#ae81ff">0x00000001U</span>) <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">14</span>)); <span style="color:#75715e">// 16384 points
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>};
+</span></span></code></pre></div><p>Key features:</p>
+<ul>
+<li>14-bit resolution (16384 positions)</li>
+<li>Raw and calibrated angle tracking</li>
+<li>Validation system for calibration data</li>
+</ul>
+<h2 id="2-calibration-process">2. Calibration Process</h2>
+<h3 id="state-machine">State Machine</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">enum</span> {
+</span></span><span style="display:flex;"><span>    CALI_DISABLE <span style="color:#f92672">=</span> <span style="color:#ae81ff">0x00</span>,
+</span></span><span style="display:flex;"><span>    CALI_FORWARD_PREPARE,
+</span></span><span style="display:flex;"><span>    CALI_FORWARD_MEASURE,
+</span></span><span style="display:flex;"><span>    CALI_BACKWARD_RETURN,
+</span></span><span style="display:flex;"><span>    CALI_BACKWARD_GAP_DISMISS,
+</span></span><span style="display:flex;"><span>    CALI_BACKWARD_MEASURE,
+</span></span><span style="display:flex;"><span>    CALI_CALCULATING,
+</span></span><span style="display:flex;"><span>} State_t;
+</span></span></code></pre></div><p>Calibration steps:</p>
+<ol>
+<li>Forward preparation</li>
+<li>Forward measurement</li>
+<li>Backward return</li>
+<li>Gap dismissal</li>
+<li>Backward measurement</li>
+<li>Data calculation</li>
+</ol>
+<h2 id="3-measurement-system">3. Measurement System</h2>
+<h3 id="data-collection">Data Collection</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">int32_t</span> MOTOR_ONE_CIRCLE_HARD_STEPS <span style="color:#f92672">=</span> <span style="color:#ae81ff">200</span>;   <span style="color:#75715e">// 1.8° steps
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">uint8_t</span> SAMPLE_COUNTS_PER_STEP <span style="color:#f92672">=</span> <span style="color:#ae81ff">16</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">uint8_t</span> AUTO_CALIB_SPEED <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">uint8_t</span> FINE_TUNE_CALIB_SPEED <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span></code></pre></div><p>Features:</p>
+<ul>
+<li>Multiple samples per step</li>
+<li>Bi-directional measurement</li>
+<li>Automatic speed control</li>
+<li>Fine-tuning capabilities</li>
+</ul>
+<h3 id="data-processing">Data Processing</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">int32_t</span> <span style="color:#a6e22e">CycleDataAverage</span>(<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">uint16_t</span><span style="color:#f92672">*</span> _data, <span style="color:#66d9ef">uint16_t</span> _length, <span style="color:#66d9ef">int32_t</span> _cyc)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Cycle-aware averaging algorithm
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// Handles wraparound cases
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// Ensures consistent results
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><h2 id="4-validation-system">4. Validation System</h2>
+<h3 id="error-checking">Error Checking</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">enum</span> {
+</span></span><span style="display:flex;"><span>    CALI_NO_ERROR <span style="color:#f92672">=</span> <span style="color:#ae81ff">0x00</span>,
+</span></span><span style="display:flex;"><span>    CALI_ERROR_AVERAGE_DIR,
+</span></span><span style="display:flex;"><span>    CALI_ERROR_AVERAGE_CONTINUTY,
+</span></span><span style="display:flex;"><span>    CALI_ERROR_PHASE_STEP,
+</span></span><span style="display:flex;"><span>    CALI_ERROR_ANALYSIS_QUANTITY,
+</span></span><span style="display:flex;"><span>} Error_t;
+</span></span></code></pre></div><p>Validation checks:</p>
+<ul>
+<li>Direction consistency</li>
+<li>Data continuity</li>
+<li>Phase stepping</li>
+<li>Quantity analysis</li>
+</ul>
+<h3 id="data-validation">Data Validation</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">CalibrationDataCheck</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Check data direction
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// Verify data continuity
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// Validate step consistency
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// Confirm measurement accuracy
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><h2 id="5-mt6816-encoder-implementation">5. MT6816 Encoder Implementation</h2>
+<h3 id="initialization">Initialization</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">bool</span> MT6816Base<span style="color:#f92672">::</span>Init()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    SpiInit();
+</span></span><span style="display:flex;"><span>    UpdateAngle();
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Validate calibration data
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    angleData.rectifyValid <span style="color:#f92672">=</span> true;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">uint32_t</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> RESOLUTION; i<span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (quickCaliDataPtr[i] <span style="color:#f92672">==</span> <span style="color:#ae81ff">0xFFFF</span>)
+</span></span><span style="display:flex;"><span>            angleData.rectifyValid <span style="color:#f92672">=</span> false;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Features:</p>
+<ul>
+<li>SPI communication setup</li>
+<li>Calibration data validation</li>
+<li>Quick lookup table initialization</li>
+</ul>
+<h3 id="angle-reading">Angle Reading</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">uint16_t</span> MT6816Base<span style="color:#f92672">::</span>UpdateAngle()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Read raw angle data
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// Apply parity checking
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// Perform angle correction
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// Return calibrated value
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><h2 id="6-flash-management">6. Flash Management</h2>
+<h3 id="data-storage">Data Storage</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">TickMainLoop</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Calculate calibration data
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    ClearFlash();
+</span></span><span style="display:flex;"><span>    BeginWriteFlash();
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Store calibration values
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    EndWriteFlash();
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Features:</p>
+<ul>
+<li>Safe flash writing</li>
+<li>Data integrity checks</li>
+<li>Error recovery</li>
+<li>System reset after calibration</li>
+</ul>
+<h2 id="7-key-algorithms">7. Key Algorithms</h2>
+<h3 id="cycle-arithmetic">Cycle Arithmetic</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">uint32_t</span> CycleMod(<span style="color:#66d9ef">uint32_t</span> _a, <span style="color:#66d9ef">uint32_t</span> _b)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">int32_t</span> CycleSubtract(<span style="color:#66d9ef">int32_t</span> _a, <span style="color:#66d9ef">int32_t</span> _b, <span style="color:#66d9ef">int32_t</span> _cyc)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">int32_t</span> CycleAverage(<span style="color:#66d9ef">int32_t</span> _a, <span style="color:#66d9ef">int32_t</span> _b, <span style="color:#66d9ef">int32_t</span> _cyc)
+</span></span></code></pre></div><p>Implements:</p>
+<ul>
+<li>Modular arithmetic</li>
+<li>Wraparound handling</li>
+<li>Averaging with cycle awareness</li>
+<li>Delta calculations</li>
+</ul>
+<h2 id="8-system-benefits">8. System Benefits</h2>
+<ol>
+<li>
+<p>Accuracy</p>
+<ul>
+<li>High-resolution measurement</li>
+<li>Multiple samples per position</li>
+<li>Bi-directional validation</li>
+<li>Error compensation</li>
+</ul>
+</li>
+<li>
+<p>Reliability</p>
+<ul>
+<li>Comprehensive error checking</li>
+<li>Data validation</li>
+<li>Flash data persistence</li>
+<li>Recovery mechanisms</li>
+</ul>
+</li>
+<li>
+<p>Performance</p>
+<ul>
+<li>Fast angle updates</li>
+<li>Efficient lookup table</li>
+<li>Optimized calculations</li>
+<li>Quick calibration process</li>
+</ul>
+</li>
+<li>
+<p>Flexibility</p>
+<ul>
+<li>Adaptable to different encoders</li>
+<li>Configurable parameters</li>
+<li>Multiple validation methods</li>
+<li>Extensible architecture</li>
+</ul>
+</li>
+</ol>
+<p>This implementation provides a robust foundation for precise position feedback in stepper motor applications requiring high accuracy and reliability.</p>
+
+
+        
+
+    </div>
+  </body>
+</html>
