@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en-us">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+<head>
   
-    <meta name="generator" content="Hugo 0.138.0"><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+	<meta name="generator" content="Hugo 0.138.0"><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Hi, I'm Ernest!</title>
@@ -30,100 +30,65 @@
 <style>
     .image-grid {
         display: grid;
-        grid-template-columns: repeat(3, 200px); /* Smaller containers */
-        gap: 1rem;
+        grid-template-columns: repeat(3, 250px);
+        gap: 1.5rem;
         padding: 1rem;
         justify-content: start;
     }
 
-    .image-grid-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    /* Update project container to use flex column */
     .project {
         transition: transform 0.2s;
-        border: 2px solid #0a3570;
-        padding: 0.25rem;
+        border: 3px solid #555;  
+        padding: 1rem;
         border-radius: 8px;
-        width: 200px !important;
-        height: 200px !important;
-        position: relative;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        background-color: #fff;
-        margin-bottom: 0; /* remove bottom margin */
     }
 
-    /* Add styles for project title */
-    .project-title {
-        font-size: 0.7rem;
-        color: #333;
-        margin-top: 0.1rem;
-        text-align: center;
-        font-weight: 500;
+    .project:nth-child(1) {
+        background: #788aa3;
+        border-color: #566b84;
     }
 
-    .project-label {
-        font-size: 0.9rem;
-        color: #333;
-        text-align: center;
-        font-weight: 500;
-        margin-top: 0.25rem;
+    .project:nth-child(2) {
+        background: #a37878;
+        border-color: #845656;
     }
 
-    /* Adjust image size to make room for text */
+    .project:nth-child(3) {
+        background: #78a384;
+        border-color: #567856;
+    }
+
     .project img {
-        width: 100%;
-        height: 100%;
+        width: 250px;
+        height: 250px;
         object-fit: contain;
-        margin-bottom: 0.5rem;
         display: block;
-        transition: transform 0.2s;
-        margin: auto;
+        transition: transform 0.2s;  
     }
-
-    .project.coming-soon {
-        background-color: #f5f5f5;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-style: italic;
-        color: #666;
-    }
-
-    /* General image styles for other projects */
-  
 
     .project:nth-child(odd):hover img {
-        transform: rotate(5deg);  
+        transform: rotate(15deg);  
     }
 
     .project:nth-child(even):hover img {
-        transform: rotate(-5deg);  
+        transform: rotate(-15deg);  
     }
 
-    /* Remove margin-left styles */
-    .project:nth-child(2) img,
-    .project:nth-child(3) img,
-    .project:nth-child(4) img {
-        margin-left: 2;
-    }
-
-    /* Simplified hover effects */
     .project:hover {
         transform: scale(1.05);
-        box-shadow: 0 0 10px rgba(120, 138, 163, 0.2);
+        box-shadow: 0 0 20px rgba(120, 138, 163, 0.3);
     }
 
-    .project:hover img {
-        transform: scale(0.98);
+    .project:nth-child(2) img {
+        margin-left: -20px;
+    }
+
+    .project:nth-child(3) img {
+        margin-left: -20px;
+    }
+
+    .project:nth-child(4) img {
+        margin-left: -20px;
     }
 
     .project.sample {
@@ -133,31 +98,19 @@
         justify-content: center;
     }
 
-    .project .coming-soon {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: #f5f5f5;
+    .project.sample:nth-child(4) {
+        background: #8778a3;
+        border-color: #655684;
     }
 
-    /* Fallback for browsers that don't support aspect-ratio */
-    @supports not (aspect-ratio: 1) {
-        .project {
-            padding-top: 100%;
-        }
-        
-        .project > * {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
+    .project.sample:nth-child(5) {
+        background: #a39778;
+        border-color: #847856;
+    }
+
+    .project.sample:nth-child(6) {
+        background: #a37884;
+        border-color: #845656;
     }
 
     .terminal-logo .logo {
@@ -176,10 +129,14 @@
         color: #ddd;
     }
 
-   
+    .project:nth-child(4) {
+        background: #8778a3;
+        border-color: #655684;
+    }
+
     .coming-soon {
         color: rgba(255, 255, 255, 0.8);
-        font-size: 1rem;
+        font-size: 1.4rem;
         font-weight: 400;
         letter-spacing: 2px;
         text-transform: uppercase;
@@ -194,35 +151,19 @@
     }
 
     h1 {
-        font-size: 1.2rem;
-        margin-top: 1.2rem;    /* Reduced from 2rem */
-        margin-bottom: 0.5rem; /* Reduced from 1rem */
+        margin-top: 1.5rem;     
+        margin-bottom: 1rem;    
+    }
+
+     
+    h1 {
+        margin-top: 1rem;
+        margin-bottom: 0.75rem;
     }
 
      
     .colored-text {
         color: #0a3570;  
-    }
-
-    ul {
-        margin: 0;
-        padding: 0;
-        margin-bottom: 0rem; /* Reduced from default */
-        list-style-type: none !important;
-        padding-left: 0;
-    }
-
-    li {
-        margin-bottom: 0.4rem; /* Reduced from 0.8rem */
-        line-height: 1.4;     /* Tightened line height */
-    }
-
-    .container {
-        padding: 0 1rem;
-    }
-
-    .terminal-nav {
-        margin-bottom: -2rem; /* Reduced from default */
     }
 </style>
 
@@ -234,7 +175,7 @@
             <div class="logo terminal-prompt">
               
               
-              <a href="http://localhost:1313/" style="font-size: 1.4rem;">Hi, I'm Ernest!</a>
+              <a href="http://localhost:1313/">Hi, I'm Ernest!</a>
               </div></header>
           <nav class="terminal-menu">
             <ul vocab="https://schema.org/" typeof="BreadcrumbList">
@@ -247,10 +188,12 @@
     <div class="container " >
         
 
-        <h1>About</h1>
+<h1>About</h1>
+
 <ul>
   <li>Mechatronics Engineering student @ UWaterloo.</li>
   <li>Building cool robotics applications.</li>
+  <li>Enjoys working on innovative projects and solving complex problems.</li>
 </ul>
 
 <h1>Experiences</h1>
@@ -258,58 +201,39 @@
 <ul>
   <li>Currently Embedded and Product Development for telematic devices @ <a href="https://www.geotab.com">Geotab</a></li>
   <li>Co-founded University of Waterloo's first humanoid robotics design team - <a href="https://uw-robosoccer.github.io/">UW RoboSoccer</a> </li>
-  <li>Previously SxS Product Development @ <a href="https://www.BRP.com">BRP</a> & Acoustic tester prototyping @ <a href="https://paragonsystems.net/">Paragon Systems</a></li>
+  <li>Off-road Side-by-Side Accessories development @ <a href="https://www.BRP.com">BRP</a></li>
+  <li>Acoustic tester prototyping @ <a href="https://paragonsystems.net/">Paragon Systems</a></li>
 </ul>
 
 <h1>Projects</h1>
 
 <div class="image-grid">
-    <div class="image-grid-item">
-        <div class="project">
-            <a href="/robotics-arm">
-                <img src="dummy_image.png" alt="Robotic Arm">
-            </a>
-        </div>
-        <span class="project-title">Dummy Robotic Arm</span>
+  <div class="project">
+    <a href="/dummy-robotic-arm">
+        <img src="/dummy_image.png" alt="Robotic Arm Project">
+    </a>
+</div>
+    <div class="project">
+        <a href="/projects/project2">
+            <img src="/legged-wheeled.png" alt="Legged Wheeled Robot">
+        </a>
+    </div>
+    <div class="project">
+        <a href="/projects/project3">
+            <img src="/robocup.png" alt="RoboCup Project">
+        </a>
     </div>
 
-    <div class="image-grid-item">
-        <div class="project">
-            <a href="/legged-robot">
-                <img src="legged-wheeled.png" alt="Legged Robot">
-            </a>
-        </div>
-        <span class="project-title">Wheeled-Legged Robot</span>
+    <div class="project">
+        <a href="/projects/project4">
+            <img src="/bionic_hand.png" alt="Bionic Hand Project">
+        </a>
     </div>
-
-    <div class="image-grid-item">
-        <div class="project">
-            <a href="/legged-robot">
-                <img src="robocup.png" alt="Robocup">
-            </a>
-        </div>
-        <span class="project-title">RoboSoccer Humanoid</span>
+    <div class="project sample">
+        <div class="coming-soon">Coming Soon</div>
     </div>
-    <div class="image-grid-item">
-        <div class="project">
-            <a href="/legged-robot">
-                <img src="bionic_hand.png" alt="Bionic Hand">
-            </a>
-        </div>
-        <span class="project-title">Bionic Hand - WIP</span>
-    </div>
-
-    <div class="image-grid-item">
-        <div class="project coming-soon">
-            Coming Soon
-        </div>
-        <span class="project-title"></span>
-    </div>
-    <div class="image-grid-item">
-        <div class="project coming-soon">
-            Coming Soon
-        </div>
-        <span class="project-title"></span>
+    <div class="project sample">
+        <div class="coming-soon">Coming Soon</div>
     </div>
 </div>
 
