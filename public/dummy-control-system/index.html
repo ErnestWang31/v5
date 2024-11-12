@@ -1,30 +1,5 @@
-<!DOCTYPE html>
-<html lang="en-us">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>ernesternestwang.ca/dummy-control-system/</title>
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="robots" content="all,follow">
-    <meta name="googlebot" content="index,follow,snippet,archive">
-    <link rel="stylesheet" href="ernestwang.ca/hugo-theme-console/css/terminal-0.7.4.min.css">
-    <link rel="stylesheet" href="ernestwang.ca/hugo-theme-console/css/animate-4.1.1.min.css">
-    <link rel="stylesheet" href="ernestwang.ca/hugo-theme-console/css/console.css">
-    
-      <!--[if lt IE 9]>
-          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-      <![endif]-->
-       <meta property="og:title" content="Dummy Robot Control System" />
-<meta property="og:description" content="" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="ernestwang.ca/dummy-control-system/" /><meta property="article:published_time" content="2024-01-01T00:00:00+00:00" />
-
-
-
-<meta name="twitter:title" content="Dummy Robot Control System"/>
-<meta name="twitter:description" content="Dummy Robot Control System Documentation
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><title>ernesternestwang.ca/dummy-control-system/</title>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="all,follow"><meta name=googlebot content="index,follow,snippet,archive"><link rel=stylesheet href=ernestwang.ca/hugo-theme-console/css/terminal-0.7.4.min.css><link rel=stylesheet href=ernestwang.ca/hugo-theme-console/css/animate-4.1.1.min.css><link rel=stylesheet href=ernestwang.ca/hugo-theme-console/css/console.css><!--[if lt IE 9]><script src=https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js></script><script src=https://oss.maxcdn.com/respond/1.4.2/respond.min.js></script><![endif]--><meta property="og:title" content="Dummy Robot Control System"><meta property="og:description" content><meta property="og:type" content="article"><meta property="og:url" content="ernestwang.ca/dummy-control-system/"><meta property="article:published_time" content="2024-01-01T00:00:00+00:00"><meta name=twitter:title content="Dummy Robot Control System"><meta name=twitter:description content="Dummy Robot Control System Documentation
 This document details the implementation of a 6-DOF robot control system, including movement control, command handling, and system management.
 1. Robot Configuration and Initialization
 Robot Constructor
@@ -51,231 +26,66 @@ bool DummyRobot::MoveJ(float _j1, float _j2, float _j3, float _j4, float _j5, fl
     // Set joint speeds
     // Execute movement
 }
-Features:"/>
-
-</head>
-<body class="terminal">
-    <div class="container">
-        <div class="terminal-nav">
-          <header class="terminal-logo">
-            <div class="logo terminal-prompt">
-              
-              
-              <a href="ernestwang.ca/" class="no-style ">ernest</a>:~# 
-              <a href='ernestwang.ca/ernestwang.ca/dummy-control-system'>dummy-control-system</a>/</div></header>
-          <nav class="terminal-menu">
-            <ul vocab="https://schema.org/" typeof="BreadcrumbList">
-                
-            </ul>
-          </nav>
-        </div>
-    </div>
-
-    <div class="container " >
-        
-<h1>Dummy Robot Control System</h1>
-<h1 id="dummy-robot-control-system-documentation">Dummy Robot Control System Documentation</h1>
-<p>This document details the implementation of a 6-DOF robot control system, including movement control, command handling, and system management.</p>
-<h2 id="1-robot-configuration-and-initialization">1. Robot Configuration and Initialization</h2>
-<h3 id="robot-constructor">Robot Constructor</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>DummyRobot<span style="color:#f92672">::</span>DummyRobot(CAN_HandleTypeDef<span style="color:#f92672">*</span> _hcan)
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    motorJ[ALL] <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> CtrlStepMotor(_hcan, <span style="color:#ae81ff">0</span>, false, <span style="color:#ae81ff">1</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">180</span>, <span style="color:#ae81ff">180</span>);
-</span></span><span style="display:flex;"><span>    motorJ[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> CtrlStepMotor(_hcan, <span style="color:#ae81ff">1</span>, true, <span style="color:#ae81ff">30</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">170</span>, <span style="color:#ae81ff">170</span>);
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Additional joint configurations...
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
-</span></span></code></pre></div><p>Key configurations for each joint:</p>
-<ul>
-<li>CAN bus communication</li>
-<li>Motor IDs and directions</li>
-<li>Gear ratios</li>
-<li>Joint limits</li>
-<li>Kinematic parameters</li>
-</ul>
-<h2 id="2-movement-control">2. Movement Control</h2>
-<h3 id="joint-movement-movej">Joint Movement (MoveJ)</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">bool</span> DummyRobot<span style="color:#f92672">::</span>MoveJ(<span style="color:#66d9ef">float</span> _j1, <span style="color:#66d9ef">float</span> _j2, <span style="color:#66d9ef">float</span> _j3, <span style="color:#66d9ef">float</span> _j4, <span style="color:#66d9ef">float</span> _j5, <span style="color:#66d9ef">float</span> _j6)
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Validate joint limits
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// Calculate movement times
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// Set joint speeds
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// Execute movement
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
-</span></span></code></pre></div><p>Features:</p>
-<ul>
-<li>Joint limit validation</li>
-<li>Synchronized movement</li>
-<li>Dynamic speed calculation</li>
-<li>Safety checks</li>
-</ul>
-<h3 id="linear-movement-movel">Linear Movement (MoveL)</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">bool</span> DummyRobot<span style="color:#f92672">::</span>MoveL(<span style="color:#66d9ef">float</span> _x, <span style="color:#66d9ef">float</span> _y, <span style="color:#66d9ef">float</span> _z, <span style="color:#66d9ef">float</span> _a, <span style="color:#66d9ef">float</span> _b, <span style="color:#66d9ef">float</span> _c)
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Solve inverse kinematics
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// Validate solutions
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// Choose optimal solution
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// Execute movement
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
-</span></span></code></pre></div><p>Implementation details:</p>
-<ol>
-<li>Cartesian coordinate input</li>
-<li>Multiple solution handling</li>
-<li>Path optimization</li>
-<li>Joint limit checking</li>
-</ol>
-<h2 id="3-safety-features">3. Safety Features</h2>
-<h3 id="emergency-stop">Emergency Stop</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> DummyRobot<span style="color:#f92672">::</span>CommandHandler<span style="color:#f92672">::</span>EmergencyStop()
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    context<span style="color:#f92672">-&gt;</span>MoveJ(context<span style="color:#f92672">-&gt;</span>currentJoints.a[<span style="color:#ae81ff">0</span>], ...);
-</span></span><span style="display:flex;"><span>    context<span style="color:#f92672">-&gt;</span>isEnabled <span style="color:#f92672">=</span> false;
-</span></span><span style="display:flex;"><span>    ClearFifo();
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>Safety measures:</p>
-<ul>
-<li>Immediate movement stop</li>
-<li>Motor power control</li>
-<li>Command queue clearing</li>
-<li>State management</li>
-</ul>
-<h3 id="joint-limits">Joint Limits</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> DummyRobot<span style="color:#f92672">::</span>SetJointSpeed(<span style="color:#66d9ef">float</span> _speed)
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (_speed <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>)_speed <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span> <span style="color:#a6e22e">if</span> (_speed <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">100</span>) _speed <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span>;
-</span></span><span style="display:flex;"><span>    jointSpeed <span style="color:#f92672">=</span> _speed <span style="color:#f92672">*</span> jointSpeedRatio;
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>Protection features:</p>
-<ul>
-<li>Speed limits</li>
-<li>Acceleration control</li>
-<li>Current limiting</li>
-<li>Position boundaries</li>
-</ul>
-<h2 id="4-command-system">4. Command System</h2>
-<h3 id="command-handling">Command Handling</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">uint32_t</span> DummyRobot<span style="color:#f92672">::</span>CommandHandler<span style="color:#f92672">::</span>ParseCommand(<span style="color:#66d9ef">const</span> std<span style="color:#f92672">::</span>string <span style="color:#f92672">&amp;</span>_cmd)
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">switch</span> (context<span style="color:#f92672">-&gt;</span>commandMode)
-</span></span><span style="display:flex;"><span>    {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">case</span> COMMAND_TARGET_POINT_SEQUENTIAL:
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">case</span> COMMAND_CONTINUES_TRAJECTORY:
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Command parsing and execution
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>Command types:</p>
-<ul>
-<li>Joint movement (&gt;)</li>
-<li>Linear movement (@)</li>
-<li>Speed control</li>
-<li>System control</li>
-</ul>
-<h3 id="command-modes">Command Modes</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> DummyRobot<span style="color:#f92672">::</span>SetCommandMode(<span style="color:#66d9ef">uint32_t</span> _mode)
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    commandMode <span style="color:#f92672">=</span> <span style="color:#66d9ef">static_cast</span><span style="color:#f92672">&lt;</span>CommandMode<span style="color:#f92672">&gt;</span>(_mode);
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Configure mode-specific parameters
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
-</span></span></code></pre></div><p>Available modes:</p>
-<ol>
-<li>Sequential point-to-point</li>
-<li>Continuous trajectory</li>
-<li>Interruptible movement</li>
-<li>Motor tuning</li>
-</ol>
-<h2 id="5-system-calibration">5. System Calibration</h2>
-<h3 id="home-calibration">Home Calibration</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> DummyRobot<span style="color:#f92672">::</span>CalibrateHomeOffset()
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Calibration sequence
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// Position setting
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// Offset application
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
-</span></span></code></pre></div><p>Calibration process:</p>
-<ol>
-<li>Motor enable control</li>
-<li>Reference position setting</li>
-<li>Home offset application</li>
-<li>System reboot</li>
-</ol>
-<h2 id="6-status-monitoring">6. Status Monitoring</h2>
-<h3 id="position-updates">Position Updates</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> DummyRobot<span style="color:#f92672">::</span>UpdateJointAngles()
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> DummyRobot<span style="color:#f92672">::</span>UpdateJointPose6D()
-</span></span></code></pre></div><p>Monitoring features:</p>
-<ul>
-<li>Joint angle tracking</li>
-<li>Cartesian position calculation</li>
-<li>Movement state monitoring</li>
-<li>System status updates</li>
-</ul>
-<h2 id="7-additional-features">7. Additional Features</h2>
-<h3 id="hand-control">Hand Control</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> DummyHand<span style="color:#f92672">::</span>SetAngle(<span style="color:#66d9ef">float</span> _angle)
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> DummyHand<span style="color:#f92672">::</span>SetMaxCurrent(<span style="color:#66d9ef">float</span> _val)
-</span></span></code></pre></div><p>Gripper features:</p>
-<ul>
-<li>Angle control</li>
-<li>Current limiting</li>
-<li>Safety bounds</li>
-<li>Enable/disable control</li>
-</ul>
-<h3 id="motor-tuning">Motor Tuning</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> DummyRobot<span style="color:#f92672">::</span>TuningHelper<span style="color:#f92672">::</span>Tick(<span style="color:#66d9ef">uint32_t</span> _timeMillis)
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Calculate sinusoidal movement
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// Apply to selected joints
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
-</span></span></code></pre></div><p>Tuning capabilities:</p>
-<ul>
-<li>Frequency control</li>
-<li>Amplitude adjustment</li>
-<li>Joint selection</li>
-<li>Real-time adjustment</li>
-</ul>
-<h2 id="key-system-benefits">Key System Benefits</h2>
-<ol>
-<li>
-<p>Safety</p>
-<ul>
-<li>Comprehensive limit checking</li>
-<li>Emergency stop capability</li>
-<li>Current protection</li>
-<li>Movement validation</li>
-</ul>
-</li>
-<li>
-<p>Precision</p>
-<ul>
-<li>Accurate position control</li>
-<li>Synchronized joint movement</li>
-<li>Path optimization</li>
-<li>Calibration support</li>
-</ul>
-</li>
-<li>
-<p>Flexibility</p>
-<ul>
-<li>Multiple movement modes</li>
-<li>Command queueing</li>
-<li>Dynamic speed control</li>
-<li>Tuning capabilities</li>
-</ul>
-</li>
-<li>
-<p>Reliability</p>
-<ul>
-<li>Robust error handling</li>
-<li>State monitoring</li>
-<li>Communication management</li>
-<li>System protection</li>
-</ul>
-</li>
-</ol>
-
-
-        
-
-    </div>
-  </body>
-</html>
+Features:"></head><body class=terminal><div class=container><div class=terminal-nav><header class=terminal-logo><div class="logo terminal-prompt"><a href=ernestwang.ca/ class=no-style>ernest</a>:~#
+<a href=ernestwang.ca/ernestwang.ca/dummy-control-system>dummy-control-system</a>/</div></header><nav class=terminal-menu><ul vocab="https://schema.org/" typeof="BreadcrumbList"></ul></nav></div></div><div class=container><h1>Dummy Robot Control System</h1><h1 id=dummy-robot-control-system-documentation>Dummy Robot Control System Documentation</h1><p>This document details the implementation of a 6-DOF robot control system, including movement control, command handling, and system management.</p><h2 id=1-robot-configuration-and-initialization>1. Robot Configuration and Initialization</h2><h3 id=robot-constructor>Robot Constructor</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=display:flex><span>DummyRobot<span style=color:#f92672>::</span>DummyRobot(CAN_HandleTypeDef<span style=color:#f92672>*</span> _hcan)
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>    motorJ[ALL] <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> CtrlStepMotor(_hcan, <span style=color:#ae81ff>0</span>, false, <span style=color:#ae81ff>1</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>180</span>, <span style=color:#ae81ff>180</span>);
+</span></span><span style=display:flex><span>    motorJ[<span style=color:#ae81ff>1</span>] <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> CtrlStepMotor(_hcan, <span style=color:#ae81ff>1</span>, true, <span style=color:#ae81ff>30</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>170</span>, <span style=color:#ae81ff>170</span>);
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// Additional joint configurations...
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>}
+</span></span></code></pre></div><p>Key configurations for each joint:</p><ul><li>CAN bus communication</li><li>Motor IDs and directions</li><li>Gear ratios</li><li>Joint limits</li><li>Kinematic parameters</li></ul><h2 id=2-movement-control>2. Movement Control</h2><h3 id=joint-movement-movej>Joint Movement (MoveJ)</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#66d9ef>bool</span> DummyRobot<span style=color:#f92672>::</span>MoveJ(<span style=color:#66d9ef>float</span> _j1, <span style=color:#66d9ef>float</span> _j2, <span style=color:#66d9ef>float</span> _j3, <span style=color:#66d9ef>float</span> _j4, <span style=color:#66d9ef>float</span> _j5, <span style=color:#66d9ef>float</span> _j6)
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// Validate joint limits
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>// Calculate movement times
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>// Set joint speeds
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>// Execute movement
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>}
+</span></span></code></pre></div><p>Features:</p><ul><li>Joint limit validation</li><li>Synchronized movement</li><li>Dynamic speed calculation</li><li>Safety checks</li></ul><h3 id=linear-movement-movel>Linear Movement (MoveL)</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#66d9ef>bool</span> DummyRobot<span style=color:#f92672>::</span>MoveL(<span style=color:#66d9ef>float</span> _x, <span style=color:#66d9ef>float</span> _y, <span style=color:#66d9ef>float</span> _z, <span style=color:#66d9ef>float</span> _a, <span style=color:#66d9ef>float</span> _b, <span style=color:#66d9ef>float</span> _c)
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// Solve inverse kinematics
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>// Validate solutions
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>// Choose optimal solution
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>// Execute movement
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>}
+</span></span></code></pre></div><p>Implementation details:</p><ol><li>Cartesian coordinate input</li><li>Multiple solution handling</li><li>Path optimization</li><li>Joint limit checking</li></ol><h2 id=3-safety-features>3. Safety Features</h2><h3 id=emergency-stop>Emergency Stop</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#66d9ef>void</span> DummyRobot<span style=color:#f92672>::</span>CommandHandler<span style=color:#f92672>::</span>EmergencyStop()
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>    context<span style=color:#f92672>-&gt;</span>MoveJ(context<span style=color:#f92672>-&gt;</span>currentJoints.a[<span style=color:#ae81ff>0</span>], ...);
+</span></span><span style=display:flex><span>    context<span style=color:#f92672>-&gt;</span>isEnabled <span style=color:#f92672>=</span> false;
+</span></span><span style=display:flex><span>    ClearFifo();
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>Safety measures:</p><ul><li>Immediate movement stop</li><li>Motor power control</li><li>Command queue clearing</li><li>State management</li></ul><h3 id=joint-limits>Joint Limits</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#66d9ef>void</span> DummyRobot<span style=color:#f92672>::</span>SetJointSpeed(<span style=color:#66d9ef>float</span> _speed)
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> (_speed <span style=color:#f92672>&lt;</span> <span style=color:#ae81ff>0</span>)_speed <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>else</span> <span style=color:#a6e22e>if</span> (_speed <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>100</span>) _speed <span style=color:#f92672>=</span> <span style=color:#ae81ff>100</span>;
+</span></span><span style=display:flex><span>    jointSpeed <span style=color:#f92672>=</span> _speed <span style=color:#f92672>*</span> jointSpeedRatio;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>Protection features:</p><ul><li>Speed limits</li><li>Acceleration control</li><li>Current limiting</li><li>Position boundaries</li></ul><h2 id=4-command-system>4. Command System</h2><h3 id=command-handling>Command Handling</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#66d9ef>uint32_t</span> DummyRobot<span style=color:#f92672>::</span>CommandHandler<span style=color:#f92672>::</span>ParseCommand(<span style=color:#66d9ef>const</span> std<span style=color:#f92672>::</span>string <span style=color:#f92672>&amp;</span>_cmd)
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>switch</span> (context<span style=color:#f92672>-&gt;</span>commandMode)
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>case</span> COMMAND_TARGET_POINT_SEQUENTIAL:
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>case</span> COMMAND_CONTINUES_TRAJECTORY:
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// Command parsing and execution
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>Command types:</p><ul><li>Joint movement (>)</li><li>Linear movement (@)</li><li>Speed control</li><li>System control</li></ul><h3 id=command-modes>Command Modes</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#66d9ef>void</span> DummyRobot<span style=color:#f92672>::</span>SetCommandMode(<span style=color:#66d9ef>uint32_t</span> _mode)
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>    commandMode <span style=color:#f92672>=</span> <span style=color:#66d9ef>static_cast</span><span style=color:#f92672>&lt;</span>CommandMode<span style=color:#f92672>&gt;</span>(_mode);
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// Configure mode-specific parameters
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>}
+</span></span></code></pre></div><p>Available modes:</p><ol><li>Sequential point-to-point</li><li>Continuous trajectory</li><li>Interruptible movement</li><li>Motor tuning</li></ol><h2 id=5-system-calibration>5. System Calibration</h2><h3 id=home-calibration>Home Calibration</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#66d9ef>void</span> DummyRobot<span style=color:#f92672>::</span>CalibrateHomeOffset()
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// Calibration sequence
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>// Position setting
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>// Offset application
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>}
+</span></span></code></pre></div><p>Calibration process:</p><ol><li>Motor enable control</li><li>Reference position setting</li><li>Home offset application</li><li>System reboot</li></ol><h2 id=6-status-monitoring>6. Status Monitoring</h2><h3 id=position-updates>Position Updates</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#66d9ef>void</span> DummyRobot<span style=color:#f92672>::</span>UpdateJointAngles()
+</span></span><span style=display:flex><span><span style=color:#66d9ef>void</span> DummyRobot<span style=color:#f92672>::</span>UpdateJointPose6D()
+</span></span></code></pre></div><p>Monitoring features:</p><ul><li>Joint angle tracking</li><li>Cartesian position calculation</li><li>Movement state monitoring</li><li>System status updates</li></ul><h2 id=7-additional-features>7. Additional Features</h2><h3 id=hand-control>Hand Control</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#66d9ef>void</span> DummyHand<span style=color:#f92672>::</span>SetAngle(<span style=color:#66d9ef>float</span> _angle)
+</span></span><span style=display:flex><span><span style=color:#66d9ef>void</span> DummyHand<span style=color:#f92672>::</span>SetMaxCurrent(<span style=color:#66d9ef>float</span> _val)
+</span></span></code></pre></div><p>Gripper features:</p><ul><li>Angle control</li><li>Current limiting</li><li>Safety bounds</li><li>Enable/disable control</li></ul><h3 id=motor-tuning>Motor Tuning</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#66d9ef>void</span> DummyRobot<span style=color:#f92672>::</span>TuningHelper<span style=color:#f92672>::</span>Tick(<span style=color:#66d9ef>uint32_t</span> _timeMillis)
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// Calculate sinusoidal movement
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>// Apply to selected joints
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>}
+</span></span></code></pre></div><p>Tuning capabilities:</p><ul><li>Frequency control</li><li>Amplitude adjustment</li><li>Joint selection</li><li>Real-time adjustment</li></ul><h2 id=key-system-benefits>Key System Benefits</h2><ol><li><p>Safety</p><ul><li>Comprehensive limit checking</li><li>Emergency stop capability</li><li>Current protection</li><li>Movement validation</li></ul></li><li><p>Precision</p><ul><li>Accurate position control</li><li>Synchronized joint movement</li><li>Path optimization</li><li>Calibration support</li></ul></li><li><p>Flexibility</p><ul><li>Multiple movement modes</li><li>Command queueing</li><li>Dynamic speed control</li><li>Tuning capabilities</li></ul></li><li><p>Reliability</p><ul><li>Robust error handling</li><li>State monitoring</li><li>Communication management</li><li>System protection</li></ul></li></ol></div></body></html>

@@ -1,35 +1,11 @@
-<!DOCTYPE html>
-<html lang="en-us">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>ernesternestwang.ca/motor-driver-and-foc/</title>
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="robots" content="all,follow">
-    <meta name="googlebot" content="index,follow,snippet,archive">
-    <link rel="stylesheet" href="ernestwang.ca/hugo-theme-console/css/terminal-0.7.4.min.css">
-    <link rel="stylesheet" href="ernestwang.ca/hugo-theme-console/css/animate-4.1.1.min.css">
-    <link rel="stylesheet" href="ernestwang.ca/hugo-theme-console/css/console.css">
-    
-      <!--[if lt IE 9]>
-          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-      <![endif]-->
-       <meta property="og:title" content="" />
-<meta property="og:description" content="" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="ernestwang.ca/motor-driver-and-foc/" />
-
-
-<meta name="twitter:title" content=""/>
-<meta name="twitter:description" content="This document explains the implementation of a motor driver system using Field-Oriented Control (FOC) with sine wave lookup tables for efficient operation.
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><title>ernesternestwang.ca/motor-driver-and-foc/</title>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="all,follow"><meta name=googlebot content="index,follow,snippet,archive"><link rel=stylesheet href=ernestwang.ca/hugo-theme-console/css/terminal-0.7.4.min.css><link rel=stylesheet href=ernestwang.ca/hugo-theme-console/css/animate-4.1.1.min.css><link rel=stylesheet href=ernestwang.ca/hugo-theme-console/css/console.css><!--[if lt IE 9]><script src=https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js></script><script src=https://oss.maxcdn.com/respond/1.4.2/respond.min.js></script><![endif]--><meta property="og:title" content><meta property="og:description" content><meta property="og:type" content="article"><meta property="og:url" content="ernestwang.ca/motor-driver-and-foc/"><meta name=twitter:title content><meta name=twitter:description content="This document explains the implementation of a motor driver system using Field-Oriented Control (FOC) with sine wave lookup tables for efficient operation.
 1. Sine Wave Lookup Table
 Overview
 #define sin_pi_m2_dpix      1024
 #define sin_pi_m2_dpiybit   12
 
-const int16_t sin_pi_m2[sin_pi_m2_dpix &#43; 1] = {
+const int16_t sin_pi_m2[sin_pi_m2_dpix + 1] = {
     0, 25, 50, 75, 101, ... // Full sine wave table
 };
 Key features:
@@ -60,218 +36,64 @@ protected:
     FastSinToDac_t phaseB{};
     FastSinToDac_t phaseA{};
 };
-Features:"/>
-
-</head>
-<body class="terminal">
-    <div class="container">
-        <div class="terminal-nav">
-          <header class="terminal-logo">
-            <div class="logo terminal-prompt">
-              
-              
-              <a href="ernestwang.ca/" class="no-style ">ernest</a>:~# 
-              <a href='ernestwang.ca/ernestwang.ca/motor-driver-and-foc'>motor-driver-and-foc</a>/</div></header>
-          <nav class="terminal-menu">
-            <ul vocab="https://schema.org/" typeof="BreadcrumbList">
-                
-            </ul>
-          </nav>
-        </div>
-    </div>
-
-    <div class="container " >
-        
-<h1></h1>
-<p>This document explains the implementation of a motor driver system using Field-Oriented Control (FOC) with sine wave lookup tables for efficient operation.</p>
-<h2 id="1-sine-wave-lookup-table">1. Sine Wave Lookup Table</h2>
-<h3 id="overview">Overview</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#75715e">#define sin_pi_m2_dpix      1024
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#define sin_pi_m2_dpiybit   12
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#66d9ef">int16_t</span> sin_pi_m2[sin_pi_m2_dpix <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">25</span>, <span style="color:#ae81ff">50</span>, <span style="color:#ae81ff">75</span>, <span style="color:#ae81ff">101</span>, ... <span style="color:#75715e">// Full sine wave table
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>};
-</span></span></code></pre></div><p>Key features:</p>
-<ul>
-<li>1024-point resolution for high precision</li>
-<li>Fixed-point arithmetic for efficiency</li>
-<li>Symmetrical positive and negative values</li>
-<li>12-bit precision for DAC output</li>
-</ul>
-<p>Benefits:</p>
-<ul>
-<li>Faster than real-time calculation</li>
-<li>Consistent timing</li>
-<li>Reduced CPU load</li>
-<li>Suitable for embedded systems</li>
-</ul>
-<h2 id="2-driver-base-class">2. Driver Base Class</h2>
-<h3 id="interface-definition">Interface Definition</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">DriverBase</span> {
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> Init() <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">SetFocCurrentVector</span>(<span style="color:#66d9ef">uint32_t</span> _directionInCount, <span style="color:#66d9ef">int32_t</span> _current_mA) <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">Sleep</span>() <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">Brake</span>() <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">protected</span><span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> SetTwoCoilsCurrent(<span style="color:#66d9ef">uint16_t</span> _currentA_mA, <span style="color:#66d9ef">uint16_t</span> _currentB_mA) <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Fast sine lookup structures
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    FastSinToDac_t phaseB{};
-</span></span><span style="display:flex;"><span>    FastSinToDac_t phaseA{};
-</span></span><span style="display:flex;"><span>};
-</span></span></code></pre></div><p>Features:</p>
-<ul>
-<li>Pure virtual interface</li>
-<li>Common FOC functionality</li>
-<li>Phase current control</li>
-<li>Power management states</li>
-</ul>
-<h2 id="3-tb67h450-driver-implementation">3. TB67H450 Driver Implementation</h2>
-<h3 id="foc-vector-generation">FOC Vector Generation</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> TB67H450Base<span style="color:#f92672">::</span>SetFocCurrentVector(<span style="color:#66d9ef">uint32_t</span> _directionInCount, <span style="color:#66d9ef">int32_t</span> _current_mA)
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Calculate phase angles (90 degrees offset)
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    phaseB.sinMapPtr <span style="color:#f92672">=</span> (_directionInCount) <span style="color:#f92672">&amp;</span> (<span style="color:#ae81ff">0x000003FF</span>);
-</span></span><span style="display:flex;"><span>    phaseA.sinMapPtr <span style="color:#f92672">=</span> (phaseB.sinMapPtr <span style="color:#f92672">+</span> (<span style="color:#ae81ff">256</span>)) <span style="color:#f92672">&amp;</span> (<span style="color:#ae81ff">0x000003FF</span>);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Lookup sine values
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    phaseA.sinMapData <span style="color:#f92672">=</span> sin_pi_m2[phaseA.sinMapPtr];
-</span></span><span style="display:flex;"><span>    phaseB.sinMapData <span style="color:#f92672">=</span> sin_pi_m2[phaseB.sinMapPtr];
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Calculate DAC values
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">uint32_t</span> dac_reg <span style="color:#f92672">=</span> abs(_current_mA);
-</span></span><span style="display:flex;"><span>    dac_reg <span style="color:#f92672">=</span> (<span style="color:#66d9ef">uint32_t</span>)(dac_reg <span style="color:#f92672">*</span> <span style="color:#ae81ff">5083</span>) <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">12</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Apply sine modulation
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    phaseA.dacValue12Bits <span style="color:#f92672">=</span> 
-</span></span><span style="display:flex;"><span>        (<span style="color:#66d9ef">uint32_t</span>)(dac_reg <span style="color:#f92672">*</span> abs(phaseA.sinMapData)) <span style="color:#f92672">&gt;&gt;</span> sin_pi_m2_dpiybit;
-</span></span><span style="display:flex;"><span>    phaseB.dacValue12Bits <span style="color:#f92672">=</span> 
-</span></span><span style="display:flex;"><span>        (<span style="color:#66d9ef">uint32_t</span>)(dac_reg <span style="color:#f92672">*</span> abs(phaseB.sinMapData)) <span style="color:#f92672">&gt;&gt;</span> sin_pi_m2_dpiybit;
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>Implementation details:</p>
-<ol>
-<li>
-<p>Phase angle calculation</p>
-<ul>
-<li>90-degree offset between phases</li>
-<li>10-bit angle resolution (1024 points)</li>
-<li>Circular buffer wraparound</li>
-</ul>
-</li>
-<li>
-<p>Current scaling</p>
-<ul>
-<li>12-bit DAC resolution</li>
-<li>Current limiting</li>
-<li>Fixed-point multiplication</li>
-</ul>
-</li>
-<li>
-<p>Direction control</p>
-<ul>
-<li>H-bridge direction setting</li>
-<li>Zero-crossing handling</li>
-<li>Efficient bit operations</li>
-</ul>
-</li>
-</ol>
-<h2 id="4-power-management">4. Power Management</h2>
-<h3 id="sleep-mode">Sleep Mode</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> TB67H450Base<span style="color:#f92672">::</span>Sleep()
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    phaseA.dacValue12Bits <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
-</span></span><span style="display:flex;"><span>    phaseB.dacValue12Bits <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
-</span></span><span style="display:flex;"><span>    SetTwoCoilsCurrent(phaseA.dacValue12Bits, phaseB.dacValue12Bits);
-</span></span><span style="display:flex;"><span>    SetInputA(false, false);
-</span></span><span style="display:flex;"><span>    SetInputB(false, false);
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>Features:</p>
-<ul>
-<li>Zero current output</li>
-<li>Power saving mode</li>
-<li>Safe state configuration</li>
-</ul>
-<h3 id="brake-mode">Brake Mode</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> TB67H450Base<span style="color:#f92672">::</span>Brake()
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    phaseA.dacValue12Bits <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
-</span></span><span style="display:flex;"><span>    phaseB.dacValue12Bits <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
-</span></span><span style="display:flex;"><span>    SetTwoCoilsCurrent(phaseA.dacValue12Bits, phaseB.dacValue12Bits);
-</span></span><span style="display:flex;"><span>    SetInputA(true, true);
-</span></span><span style="display:flex;"><span>    SetInputB(true, true);
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>Features:</p>
-<ul>
-<li>Active motor braking</li>
-<li>Short circuit windings</li>
-<li>Rapid deceleration</li>
-</ul>
-<h2 id="5-optimization-techniques">5. Optimization Techniques</h2>
-<h3 id="fast-sine-calculation">Fast Sine Calculation</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">struct</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">uint16_t</span> sinMapPtr;     <span style="color:#75715e">// Lookup table index
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int16_t</span> sinMapData;     <span style="color:#75715e">// Sine value
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">uint16_t</span> dacValue12Bits; <span style="color:#75715e">// DAC output value
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>} FastSinToDac_t;
-</span></span></code></pre></div><p>Benefits:</p>
-<ul>
-<li>No floating-point math</li>
-<li>Deterministic timing</li>
-<li>Efficient memory usage</li>
-<li>Fast table lookup</li>
-</ul>
-<h3 id="current-scaling">Current Scaling</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">uint32_t</span> dac_reg <span style="color:#f92672">=</span> (<span style="color:#66d9ef">uint32_t</span>)(dac_reg <span style="color:#f92672">*</span> <span style="color:#ae81ff">5083</span>) <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">12</span>;
-</span></span></code></pre></div><p>Features:</p>
-<ul>
-<li>Fixed-point multiplication</li>
-<li>Efficient scaling</li>
-<li>12-bit DAC resolution</li>
-<li>Current limiting</li>
-</ul>
-<h2 id="6-key-system-benefits">6. Key System Benefits</h2>
-<ol>
-<li>
-<p>Performance</p>
-<ul>
-<li>Fast execution</li>
-<li>Deterministic timing</li>
-<li>Efficient memory usage</li>
-<li>No floating-point operations</li>
-</ul>
-</li>
-<li>
-<p>Precision</p>
-<ul>
-<li>1024-point sine resolution</li>
-<li>12-bit DAC output</li>
-<li>Accurate phase control</li>
-<li>Smooth sinusoidal output</li>
-</ul>
-</li>
-<li>
-<p>Flexibility</p>
-<ul>
-<li>Adaptable base class</li>
-<li>Multiple driver support</li>
-<li>Configurable parameters</li>
-<li>Power management modes</li>
-</ul>
-</li>
-<li>
-<p>Reliability</p>
-<ul>
-<li>Protected operations</li>
-<li>Safe state handling</li>
-<li>Current limiting</li>
-<li>Robust implementation</li>
-</ul>
-</li>
-</ol>
-
-
-        
-
-    </div>
-  </body>
-</html>
+Features:"></head><body class=terminal><div class=container><div class=terminal-nav><header class=terminal-logo><div class="logo terminal-prompt"><a href=ernestwang.ca/ class=no-style>ernest</a>:~#
+<a href=ernestwang.ca/ernestwang.ca/motor-driver-and-foc>motor-driver-and-foc</a>/</div></header><nav class=terminal-menu><ul vocab="https://schema.org/" typeof="BreadcrumbList"></ul></nav></div></div><div class=container><h1></h1><p>This document explains the implementation of a motor driver system using Field-Oriented Control (FOC) with sine wave lookup tables for efficient operation.</p><h2 id=1-sine-wave-lookup-table>1. Sine Wave Lookup Table</h2><h3 id=overview>Overview</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#75715e>#define sin_pi_m2_dpix      1024
+</span></span></span><span style=display:flex><span><span style=color:#75715e>#define sin_pi_m2_dpiybit   12
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#66d9ef>int16_t</span> sin_pi_m2[sin_pi_m2_dpix <span style=color:#f92672>+</span> <span style=color:#ae81ff>1</span>] <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>    <span style=color:#ae81ff>0</span>, <span style=color:#ae81ff>25</span>, <span style=color:#ae81ff>50</span>, <span style=color:#ae81ff>75</span>, <span style=color:#ae81ff>101</span>, ... <span style=color:#75715e>// Full sine wave table
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>};
+</span></span></code></pre></div><p>Key features:</p><ul><li>1024-point resolution for high precision</li><li>Fixed-point arithmetic for efficiency</li><li>Symmetrical positive and negative values</li><li>12-bit precision for DAC output</li></ul><p>Benefits:</p><ul><li>Faster than real-time calculation</li><li>Consistent timing</li><li>Reduced CPU load</li><li>Suitable for embedded systems</li></ul><h2 id=2-driver-base-class>2. Driver Base Class</h2><h3 id=interface-definition>Interface Definition</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>DriverBase</span> {
+</span></span><span style=display:flex><span><span style=color:#66d9ef>public</span><span style=color:#f92672>:</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>virtual</span> <span style=color:#66d9ef>void</span> Init() <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>virtual</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>SetFocCurrentVector</span>(<span style=color:#66d9ef>uint32_t</span> _directionInCount, <span style=color:#66d9ef>int32_t</span> _current_mA) <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>virtual</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>Sleep</span>() <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>virtual</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>Brake</span>() <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>protected</span><span style=color:#f92672>:</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>virtual</span> <span style=color:#66d9ef>void</span> SetTwoCoilsCurrent(<span style=color:#66d9ef>uint16_t</span> _currentA_mA, <span style=color:#66d9ef>uint16_t</span> _currentB_mA) <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>;
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// Fast sine lookup structures
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    FastSinToDac_t phaseB{};
+</span></span><span style=display:flex><span>    FastSinToDac_t phaseA{};
+</span></span><span style=display:flex><span>};
+</span></span></code></pre></div><p>Features:</p><ul><li>Pure virtual interface</li><li>Common FOC functionality</li><li>Phase current control</li><li>Power management states</li></ul><h2 id=3-tb67h450-driver-implementation>3. TB67H450 Driver Implementation</h2><h3 id=foc-vector-generation>FOC Vector Generation</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#66d9ef>void</span> TB67H450Base<span style=color:#f92672>::</span>SetFocCurrentVector(<span style=color:#66d9ef>uint32_t</span> _directionInCount, <span style=color:#66d9ef>int32_t</span> _current_mA)
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// Calculate phase angles (90 degrees offset)
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    phaseB.sinMapPtr <span style=color:#f92672>=</span> (_directionInCount) <span style=color:#f92672>&amp;</span> (<span style=color:#ae81ff>0x000003FF</span>);
+</span></span><span style=display:flex><span>    phaseA.sinMapPtr <span style=color:#f92672>=</span> (phaseB.sinMapPtr <span style=color:#f92672>+</span> (<span style=color:#ae81ff>256</span>)) <span style=color:#f92672>&amp;</span> (<span style=color:#ae81ff>0x000003FF</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// Lookup sine values
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    phaseA.sinMapData <span style=color:#f92672>=</span> sin_pi_m2[phaseA.sinMapPtr];
+</span></span><span style=display:flex><span>    phaseB.sinMapData <span style=color:#f92672>=</span> sin_pi_m2[phaseB.sinMapPtr];
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// Calculate DAC values
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#66d9ef>uint32_t</span> dac_reg <span style=color:#f92672>=</span> abs(_current_mA);
+</span></span><span style=display:flex><span>    dac_reg <span style=color:#f92672>=</span> (<span style=color:#66d9ef>uint32_t</span>)(dac_reg <span style=color:#f92672>*</span> <span style=color:#ae81ff>5083</span>) <span style=color:#f92672>&gt;&gt;</span> <span style=color:#ae81ff>12</span>;
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// Apply sine modulation
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    phaseA.dacValue12Bits <span style=color:#f92672>=</span> 
+</span></span><span style=display:flex><span>        (<span style=color:#66d9ef>uint32_t</span>)(dac_reg <span style=color:#f92672>*</span> abs(phaseA.sinMapData)) <span style=color:#f92672>&gt;&gt;</span> sin_pi_m2_dpiybit;
+</span></span><span style=display:flex><span>    phaseB.dacValue12Bits <span style=color:#f92672>=</span> 
+</span></span><span style=display:flex><span>        (<span style=color:#66d9ef>uint32_t</span>)(dac_reg <span style=color:#f92672>*</span> abs(phaseB.sinMapData)) <span style=color:#f92672>&gt;&gt;</span> sin_pi_m2_dpiybit;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>Implementation details:</p><ol><li><p>Phase angle calculation</p><ul><li>90-degree offset between phases</li><li>10-bit angle resolution (1024 points)</li><li>Circular buffer wraparound</li></ul></li><li><p>Current scaling</p><ul><li>12-bit DAC resolution</li><li>Current limiting</li><li>Fixed-point multiplication</li></ul></li><li><p>Direction control</p><ul><li>H-bridge direction setting</li><li>Zero-crossing handling</li><li>Efficient bit operations</li></ul></li></ol><h2 id=4-power-management>4. Power Management</h2><h3 id=sleep-mode>Sleep Mode</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#66d9ef>void</span> TB67H450Base<span style=color:#f92672>::</span>Sleep()
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>    phaseA.dacValue12Bits <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>;
+</span></span><span style=display:flex><span>    phaseB.dacValue12Bits <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>;
+</span></span><span style=display:flex><span>    SetTwoCoilsCurrent(phaseA.dacValue12Bits, phaseB.dacValue12Bits);
+</span></span><span style=display:flex><span>    SetInputA(false, false);
+</span></span><span style=display:flex><span>    SetInputB(false, false);
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>Features:</p><ul><li>Zero current output</li><li>Power saving mode</li><li>Safe state configuration</li></ul><h3 id=brake-mode>Brake Mode</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#66d9ef>void</span> TB67H450Base<span style=color:#f92672>::</span>Brake()
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>    phaseA.dacValue12Bits <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>;
+</span></span><span style=display:flex><span>    phaseB.dacValue12Bits <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>;
+</span></span><span style=display:flex><span>    SetTwoCoilsCurrent(phaseA.dacValue12Bits, phaseB.dacValue12Bits);
+</span></span><span style=display:flex><span>    SetInputA(true, true);
+</span></span><span style=display:flex><span>    SetInputB(true, true);
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>Features:</p><ul><li>Active motor braking</li><li>Short circuit windings</li><li>Rapid deceleration</li></ul><h2 id=5-optimization-techniques>5. Optimization Techniques</h2><h3 id=fast-sine-calculation>Fast Sine Calculation</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#66d9ef>typedef</span> <span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>uint16_t</span> sinMapPtr;     <span style=color:#75715e>// Lookup table index
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#66d9ef>int16_t</span> sinMapData;     <span style=color:#75715e>// Sine value
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#66d9ef>uint16_t</span> dacValue12Bits; <span style=color:#75715e>// DAC output value
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>} FastSinToDac_t;
+</span></span></code></pre></div><p>Benefits:</p><ul><li>No floating-point math</li><li>Deterministic timing</li><li>Efficient memory usage</li><li>Fast table lookup</li></ul><h3 id=current-scaling>Current Scaling</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#66d9ef>uint32_t</span> dac_reg <span style=color:#f92672>=</span> (<span style=color:#66d9ef>uint32_t</span>)(dac_reg <span style=color:#f92672>*</span> <span style=color:#ae81ff>5083</span>) <span style=color:#f92672>&gt;&gt;</span> <span style=color:#ae81ff>12</span>;
+</span></span></code></pre></div><p>Features:</p><ul><li>Fixed-point multiplication</li><li>Efficient scaling</li><li>12-bit DAC resolution</li><li>Current limiting</li></ul><h2 id=6-key-system-benefits>6. Key System Benefits</h2><ol><li><p>Performance</p><ul><li>Fast execution</li><li>Deterministic timing</li><li>Efficient memory usage</li><li>No floating-point operations</li></ul></li><li><p>Precision</p><ul><li>1024-point sine resolution</li><li>12-bit DAC output</li><li>Accurate phase control</li><li>Smooth sinusoidal output</li></ul></li><li><p>Flexibility</p><ul><li>Adaptable base class</li><li>Multiple driver support</li><li>Configurable parameters</li><li>Power management modes</li></ul></li><li><p>Reliability</p><ul><li>Protected operations</li><li>Safe state handling</li><li>Current limiting</li><li>Robust implementation</li></ul></li></ol></div></body></html>
